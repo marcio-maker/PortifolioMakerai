@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animações com GSAP e Three.js | Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fa; color: #1e293b; line-height: 1.6; padding: 2rem 1rem; }
+        .article-container { max-width: 800px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); overflow: hidden; }
+        .article-header { padding: 2rem 2rem 1rem 2rem; }
+        .category { display: inline-block; background: #dcfce7; color: #166534; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.35rem 1rem; border-radius: 20px; margin-bottom: 1rem; }
+        h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; color: #0f172a; }
+        .meta { display: flex; align-items: center; gap: 1rem; color: #64748b; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem; }
+        .meta i { margin-right: 0.3rem; color: #22c55e; }
+        .featured-image { width: 100%; height: 300px; background: linear-gradient(135deg, #22c55e, #06b6d4); position: relative; overflow: hidden; }
+        .featured-image::after { content: '✨ GSAP + Three.js'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 2rem; font-weight: 800; opacity: 0.2; white-space: nowrap; }
+        .article-content { padding: 2rem; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 1.8rem 0 1rem; color: #0f172a; }
+        p { margin-bottom: 1.2rem; color: #334155; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+        .tag { background: #f1f5f9; color: #1e293b; padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+        blockquote { background: #f1f5f9; border-left: 4px solid #22c55e; padding: 1.2rem 1.5rem; border-radius: 8px; font-style: italic; margin: 1.5rem 0; color: #1e293b; }
+        .code-block { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto; margin: 1.5rem 0; }
+        .article-footer { padding: 1.5rem 2rem 2rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .author-box { display: flex; align-items: center; gap: 1rem; }
+        .author-avatar { width: 48px; height: 48px; background: linear-gradient(135deg, #22c55e, #06b6d4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.2rem; }
+        .author-info strong { display: block; font-size: 1rem; color: #0f172a; }
+        .author-info span { font-size: 0.85rem; color: #64748b; }
+        .share-buttons { display: flex; gap: 0.8rem; }
+        .share-buttons a { width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #334155; transition: 0.2s; }
+        .share-buttons a:hover { background: #22c55e; color: white; }
+        .back-link { text-align: center; margin-top: 2rem; }
+        .back-link a { color: #22c55e; text-decoration: none; font-weight: 500; }
+        @media (max-width: 600px) { h1 { font-size: 1.8rem; } .article-header { padding: 1.5rem; } .article-content { padding: 1.5rem; } .article-footer { flex-direction: column; gap: 1rem; align-items: start; } }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <div class="article-header">
+            <span class="category"><i class="fa-solid fa-cube" style="margin-right: 0.4rem;"></i> Frontend</span>
+            <h1>Animações com GSAP e Three.js</h1>
+            <div class="meta">
+                <span><i class="fa-regular fa-calendar"></i> 28 Fev 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 15 min leitura</span>
+                <span><i class="fa-regular fa-user"></i> Marcio Maker</span>
+            </div>
+        </div>
+        
+        <div class="featured-image"></div>
+
+        <div class="article-content">
+            <p class="excerpt" style="font-size: 1.2rem; font-weight: 500; color: #0f172a; margin-bottom: 2rem; border-left: 4px solid #22c55e; padding-left: 1.5rem;">
+                Tutorial completo para criar animações impressionantes usando as melhores bibliotecas.
+            </p>
+            
+            <p>GSAP e Three.js são duas das bibliotecas mais poderosas para animações na web. Neste tutorial, vamos criar animações complexas, desde efeitos de scroll até modelos 3D interativos. Código passo a passo e exemplos práticos inclusos.</p>
+            
+            <h2>Tecnologias abordadas</h2>
+            <div class="tag-list">
+                <span class="tag">GSAP</span>
+                <span class="tag">Three.js</span>
+                <span class="tag">Animações</span>
+                <span class="tag">WebGL</span>
+            </div>
+
+            <blockquote>
+                “Animações não são apenas enfeites, são parte da experiência do usuário.”
+            </blockquote>
+
+            <h2>Exemplo prático com GSAP</h2>
+            <div class="code-block">
+// Timeline GSAP
+const tl = gsap.timeline({ defaults: { duration: 1, ease: "power3.out" } });
+tl.from(".box", { opacity: 0, y: 50, stagger: 0.2 });
+tl.from(".title", { opacity: 0, scale: 0.8 }, "-=0.5");
+            </div>
+
+            <h2>Three.js: primeiros passos</h2>
+            <ul>
+                <li>Criar cena, câmera e renderizador</li>
+                <li>Adicionar objetos e iluminação</li>
+                <li>Animar com requestAnimationFrame</li>
+                <li>Importar modelos 3D</li>
+            </ul>
+        </div>
+
+        <div class="article-footer">
+            <div class="author-box">
+                <div class="author-avatar">MM</div>
+                <div class="author-info">
+                    <strong>Marcio Maker</strong>
+                    <span>Designer & Desenvolvedor</span>
+                </div>
+            </div>
+            <div class="share-buttons">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#"><i class="fa-regular fa-bookmark"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="back-link">
+        <a href="#">← Voltar para o blog</a>
+    </div>
+</body>
+</html>

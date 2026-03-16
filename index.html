@@ -1,0 +1,4036 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>Marcio Maker | Studio - Portfólio & Projetos</title>
+
+    <!-- Fontes -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Lenis -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.5/dist/lenis.min.js"></script>
+
+    <style>
+        /* ===== VARIÁVEIS E RESET ===== */
+        :root {
+            --color-bg: #0a0a0a;
+            --color-bg-secondary: #1a1a1a;
+            --color-text: #f0f0f0;
+            --color-text-secondary: #cccccc;
+            --color-accent: #3d85c6;
+            --color-accent-light: #5a9bd5;
+            --color-accent-glow: rgba(61, 133, 198, 0.6);
+            --color-muted: #888888;
+            --color-border: rgba(255, 255, 255, 0.1);
+            --color-card-bg: rgba(255, 255, 255, 0.03);
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff44e5;
+            --neon-purple: #b84dff;
+            --gradient-primary: linear-gradient(135deg, var(--color-accent), #9b59b6);
+            --gradient-secondary: linear-gradient(45deg, #3d85c6, #1e3c72);
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Roboto', sans-serif;
+            --container-padding: 1rem;
+            --container-max-width: 1400px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+            --transition-smooth: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        html[data-theme='light'] {
+            --color-bg: #f0f0f0;
+            --color-bg-secondary: #ffffff;
+            --color-text: #0a0a0a;
+            --color-text-secondary: #333333;
+            --color-muted: #666666;
+            --color-border: rgba(0, 0, 0, 0.1);
+            --color-card-bg: rgba(0, 0, 0, 0.03);
+            --color-accent-glow: rgba(61, 133, 198, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background var(--transition-smooth), color var(--transition-smooth);
+            min-height: 100vh;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            width: 100%;
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        /* ===== CANVAS ===== */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* ===== UTILITÁRIOS ===== */
+        .futuristic-heading {
+            font-family: var(--font-primary);
+            letter-spacing: -0.02em;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .futuristic-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            transition: width 0.4s ease;
+            border-radius: 2px;
+        }
+
+        .futuristic-heading:hover::after {
+            width: 100%;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        html[data-theme='light'] .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: none;
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px var(--color-accent-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--color-accent-glow);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-secondary);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== SPLASH SCREEN ===== */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, #0a0a2a, #1f0a3a, #0a0a0a);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-logo {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 900;
+            font-style: italic;
+            background: linear-gradient(45deg, #ffffff, var(--neon-blue), var(--neon-pink), #ffffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 3s linear infinite;
+        }
+
+        .loading-bar {
+            width: 240px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 2rem auto;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* ===== SELECTOR DE IDIOMA ===== */
+        #lang-selector {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            backdrop-filter: blur(20px);
+            z-index: 99998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
+            padding: 1.5rem;
+        }
+
+        #lang-selector.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .lang-selector-inner {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            animation: fadeScale 0.8s ease-out;
+        }
+
+        .lang-choice {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9) 0%, rgba(30, 30, 30, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            color: white;
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .lang-choice:hover {
+            background: linear-gradient(135deg, rgba(60, 60, 60, 0.95) 0%, rgba(40, 40, 40, 0.95) 100%);
+            border-color: var(--neon-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ===== HEADER COM DROPDOWN ===== */
+        .header {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 1300px;
+            z-index: 100;
+            transition: all var(--transition-smooth);
+            opacity: 0;
+        }
+
+        .header.visible {
+            opacity: 1;
+        }
+
+        .header-inner {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 3rem;
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        html[data-theme='dark'] .header-inner {
+            background: rgba(20, 20, 20, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.4rem;
+            color: white;
+            transform: rotate(0deg);
+            transition: transform var(--transition-bounce);
+        }
+
+        .logo-container:hover .logo-icon {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--color-muted);
+        }
+
+        /* MENU UNIFICADO */
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-secondary);
+            transition: color var(--transition-smooth);
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .dropdown-toggle i {
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-toggle::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .dropdown-toggle:hover::after,
+        .dropdown:hover .dropdown-toggle::after {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 1rem;
+            padding: 0.8rem 0;
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.6rem 1.5rem;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--color-card-bg);
+            color: var(--color-text);
+            padding-left: 2rem;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-secondary);
+            transition: color var(--transition-smooth);
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--color-text);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 101;
+            padding: 10px;
+        }
+
+        .menu-toggle span {
+            width: 28px;
+            height: 2px;
+            background: var(--color-text);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .theme-toggle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(20deg) scale(1.1);
+            border-color: var(--color-accent);
+        }
+
+        .theme-toggle .sun {
+            display: none;
+        }
+
+        html[data-theme='light'] .theme-toggle .sun {
+            display: inline;
+        }
+
+        html[data-theme='light'] .theme-toggle .moon {
+            display: none;
+        }
+
+        /* Menu Mobile */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: var(--color-bg);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            padding: 2rem;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .mobile-menu a {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--color-accent);
+        }
+
+        .mobile-submenu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .mobile-submenu a {
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-transform: none;
+            color: var(--color-text-secondary);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 5rem;
+        }
+
+        .split-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .split-half {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: flex var(--transition-smooth);
+        }
+
+        .split-half:hover {
+            flex: 1.3;
+        }
+
+        .split-photo-container {
+            position: absolute;
+            inset: 0;
+        }
+
+        .split-photo {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.8s ease;
+        }
+
+        .split-half:hover .split-photo {
+            transform: scale(1.1);
+        }
+
+        .left-photo {
+            background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1964&q=80');
+        }
+
+        .right-photo {
+            background-image: url('https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=1770&q=80');
+        }
+
+        .split-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.6);
+            z-index: 1;
+            transition: background 0.5s ease;
+        }
+
+        html[data-theme='light'] .split-overlay {
+            background: rgba(240, 240, 240, 0.7);
+        }
+
+        .split-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease 0.3s;
+        }
+
+        .split-half.active .split-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .split-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .split-title span {
+            color: var(--color-accent);
+            position: relative;
+            display: inline-block;
+        }
+
+        .split-title span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--color-accent);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .split-subtitle {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+            opacity: 0;
+            animation: fadeIn 1s 2s forwards;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        .scroll-arrow {
+            width: 26px;
+            height: 40px;
+            border: 2px solid var(--color-text);
+            border-radius: 13px;
+            position: relative;
+        }
+
+        .scroll-arrow::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 4px;
+            height: 8px;
+            background: var(--color-text);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            animation: scrollDown 2s infinite;
+        }
+
+        @keyframes scrollDown {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(15px);
+            }
+        }
+
+        /* ===== SEÇÕES ===== */
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0.3;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .section-subtitle {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== FILTROS ===== */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 50px;
+            background: var(--color-card-bg);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--color-border);
+        }
+
+        .filter-btn:hover {
+            background: var(--color-bg-secondary);
+            color: var(--color-text);
+            transform: translateY(-2px);
+            border-color: var(--color-accent);
+        }
+
+        .filter-btn.active {
+            background: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+        }
+
+        /* ===== CARROSSÉIS HORIZONTAIS ===== */
+        .carousel-section {
+            margin: 3rem 0;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding: 1rem 0 2rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 1rem;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            scroll-behavior: smooth;
+        }
+
+        .carousel-track:active {
+            cursor: grabbing;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-slide {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
+            transition: all var(--transition-smooth);
+        }
+
+        .carousel-slide:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        /* Cards dentro do carrossel */
+        .carousel-card {
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .carousel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+        }
+
+        .carousel-card:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 20px 30px var(--color-accent-glow);
+            transform: translateY(-5px);
+        }
+
+        .carousel-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+            transition: all var(--transition-bounce);
+        }
+
+        .carousel-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--neon-blue);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-family: var(--font-primary);
+        }
+
+        .card-description {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-full);
+            transition: all 0.3s ease;
+        }
+
+        .carousel-card:hover .card-tag {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .card-price {
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+
+        .card-link {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .card-link:hover {
+            color: var(--color-accent);
+        }
+
+        /* Card de projeto (com imagem e badge) */
+        .project-carousel-card {
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            height: 100%;
+            transition: all var(--transition-smooth);
+            position: relative;
+        }
+
+        .project-carousel-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--color-accent);
+            box-shadow: 0 20px 30px var(--color-accent-glow);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-badge.processo {
+            background: #f59e0b;
+        }
+
+        .project-card-image {
+            height: 160px;
+            overflow: hidden;
+        }
+
+        .project-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .project-carousel-card:hover .project-card-image img {
+            transform: scale(1.1);
+        }
+
+        .project-card-content {
+            padding: 1.5rem;
+        }
+
+        .project-card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-primary);
+        }
+
+        .project-card-description {
+            color: var(--color-text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Container dos botões no card */
+        .button-container {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .btn-demo {
+            background: transparent;
+            color: #10b981;
+            border: 2px solid #10b981;
+            padding: 0.5rem 0.8rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .btn-demo:hover {
+            background: #10b981;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .btn-processo {
+            background: transparent;
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+            padding: 0.5rem 0.8rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .btn-processo:hover {
+            background: #f59e0b;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Controles do carrossel */
+        .carousel-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin: 1rem 2rem 0;
+        }
+
+        .carousel-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .carousel-btn:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: scale(1.1);
+            border-color: transparent;
+        }
+
+        .carousel-btn:active {
+            transform: scale(0.95);
+        }
+
+        .carousel-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-indicator {
+            width: 30px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--color-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .carousel-indicator.active {
+            background: var(--color-accent);
+            width: 50px;
+        }
+
+        .carousel-indicator:hover {
+            background: var(--color-accent-light);
+        }
+
+        /* Barra de progresso */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--color-accent);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--color-accent);
+        }
+
+        /* ===== SOBRE ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-content {
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--color-text-secondary);
+        }
+
+        .about-image {
+            order: -1;
+        }
+
+        .image-container {
+            position: relative;
+            width: 80%;
+            max-width: 350px;
+            aspect-ratio: 1 / 1.1;
+            margin: 0 auto;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            border-radius: calc(var(--radius-lg) - 5px);
+            transition: transform 0.6s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-tags span {
+            font-size: 0.85rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-full);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .skill-tags span:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--color-accent-glow);
+        }
+
+        /* ===== MODAIS ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(30px);
+            transition: transform 0.5s ease;
+            position: relative;
+
+            /* Esconder barra de rolagem mas manter funcionalidade */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        /* Modal de Serviços */
+        .service-detail {
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .service-icon-large {
+            font-size: 3.5rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .service-price-card {
+            background: var(--color-card-bg);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .service-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-accent);
+        }
+
+        /* Timeline do Processo */
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--color-accent), #10b981, #f59e0b);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            border: 3px solid var(--color-bg-secondary);
+            box-shadow: 0 0 0 2px var(--color-accent);
+            z-index: 2;
+        }
+
+        .timeline-item:nth-child(2)::before {
+            background: #10b981;
+            box-shadow: 0 0 0 2px #10b981;
+        }
+
+        .timeline-item:nth-child(3)::before {
+            background: #f59e0b;
+            box-shadow: 0 0 0 2px #f59e0b;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .timeline-description {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .timeline-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(61, 133, 198, 0.1);
+            color: var(--color-accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(61, 133, 198, 0.3);
+        }
+
+        /* Seção de arquivos */
+        .files-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .files-section h3 {
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .file-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .file-item:hover {
+            background: rgba(61, 133, 198, 0.1);
+            border-color: var(--color-accent);
+            transform: translateY(-3px);
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            color: var(--color-text);
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .file-size {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Modal de Produto Individual */
+        .product-detail {
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .product-detail-icon {
+            font-size: 3.5rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .product-detail-category {
+            color: var(--neon-blue);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-detail-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .product-detail-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--color-accent);
+            margin: 1.5rem 0;
+        }
+
+        .product-detail-description {
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .product-features {
+            background: var(--color-card-bg);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .product-features h4 {
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .product-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-features li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .product-features li i {
+            color: var(--color-accent);
+            width: 20px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Modal de Artigo Individual */
+        .article-detail {
+            text-align: left;
+            padding-top: 1rem;
+        }
+
+        .article-detail-category {
+            color: var(--neon-blue);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-detail-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .article-detail-excerpt {
+            font-size: 1.1rem;
+            color: var(--color-text);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .article-detail-content {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* ===== CONTATO ===== */
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-link {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-smooth);
+            border: 1px solid var(--color-border);
+        }
+
+        .contact-link:hover {
+            transform: translateX(10px);
+            border-color: var(--color-accent);
+            background: var(--color-card-bg);
+        }
+
+        .link-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .link-value {
+            font-size: 1rem;
+            word-break: break-all;
+            transition: color 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+        }
+
+        .contact-link:hover .link-value {
+            color: var(--color-accent);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--color-border);
+            margin-top: 3rem;
+            background: var(--color-card-bg);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .social-links a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-smooth);
+            color: var(--color-text);
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: translateY(-5px) scale(1.1);
+            border-color: transparent;
+        }
+
+        /* ===== WHATSAPP E BACK TO TOP ===== */
+        .whatsapp-float {
+            position: fixed;
+            right: 2rem;
+            bottom: 6rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #25D366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 90;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        }
+
+        #back-to-top {
+            position: fixed;
+            right: 2.2rem;
+            bottom: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            border: none;
+            z-index: 90;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--color-accent-glow);
+        }
+
+        #back-to-top.visible {
+            display: flex;
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 25px var(--color-accent-glow);
+        }
+
+        /* ===== MEDIA QUERIES ===== */
+        @media (min-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+
+            .container {
+                --container-padding: 2rem;
+            }
+
+            .menu-toggle {
+                display: none;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+
+            .split-container {
+                flex-direction: row;
+            }
+
+            .split-half {
+                height: 100vh;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+            }
+
+            .about-image {
+                order: 1;
+            }
+
+            .contact-link {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .carousel-slide {
+                flex: 0 0 320px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            html {
+                font-size: 16px;
+            }
+
+            .carousel-slide {
+                flex: 0 0 350px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .carousel-slide {
+                flex: 0 0 380px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Canvas Partículas -->
+    <canvas id="particleCanvas"></canvas>
+    <div id="canvas-container"></div>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="text-center">
+            <div class="splash-logo mb-6">MAKER<span style="color: var(--neon-blue);">AI</span></div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="splash-progress"></div>
+            </div>
+            <div class="mt-4 text-sm text-white/70" id="splash-status">Carregando...</div>
+        </div>
+    </div>
+
+    <!-- Seletor de Idioma -->
+    <div id="lang-selector">
+        <div class="lang-selector-inner text-center">
+            <div class="splash-logo text-4xl mb-8">MAKER<span style="color: var(--neon-blue);">AI</span></div>
+            <h2 class="text-xl font-bold mb-6">Selecione seu idioma</h2>
+            <div class="space-y-3 mb-6">
+                <button class="lang-choice" data-lang="pt">
+                    <div class="flex items-center gap-3">
+                        <span class="text-lg font-bold">🇧🇷</span>
+                        <span>Português</span>
+                    </div>
+                    <span>→</span>
+                </button>
+                <button class="lang-choice" data-lang="en">
+                    <div class="flex items-center gap-3">
+                        <span class="text-lg font-bold">🇺🇸</span>
+                        <span>English</span>
+                    </div>
+                    <span>→</span>
+                </button>
+                <button class="lang-choice" data-lang="es">
+                    <div class="flex items-center gap-3">
+                        <span class="text-lg font-bold">🇪🇸</span>
+                        <span>Español</span>
+                    </div>
+                    <span>→</span>
+                </button>
+            </div>
+            <button id="lang-fallback" class="text-sm text-white/50 hover:text-white transition-colors">Usar idioma do
+                navegador</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="main-header">
+        <div class="header-inner">
+            <div class="logo-container">
+                <div class="logo-icon">MM</div>
+                <span class="logo-text">MAKER<span>AI</span></span>
+            </div>
+
+            <nav class="nav-links">
+                <div class="dropdown">
+                    <button class="dropdown-toggle">
+                        Agência <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#sobre">Sobre</a>
+                        <a href="#projetos">Projetos</a>
+                    </div>
+                </div>
+
+                <a href="#portfolio" class="nav-link">Portfólio</a>
+                <a href="#servicos" class="nav-link">Serviços</a>
+                <a href="#loja" class="nav-link">Loja</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#contato" class="nav-link">Contato</a>
+
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fa-solid fa-moon moon"></i>
+                    <i class="fa-solid fa-sun sun"></i>
+                </button>
+                <button id="lang-change" class="nav-link" style="border: none; background: none;">PT</button>
+            </nav>
+
+            <button class="menu-toggle" id="menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Menu Mobile -->
+    <div class="mobile-menu" id="mobile-menu">
+        <nav>
+            <div>
+                <a href="#agencia" style="font-size: 1.8rem;">Agência</a>
+                <div class="mobile-submenu">
+                    <a href="#sobre">Sobre</a>
+                    <a href="#projetos">Projetos</a>
+                </div>
+            </div>
+            <a href="#portfolio">Portfólio</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#loja">Loja</a>
+            <a href="#blog">Blog</a>
+            <a href="#contato">Contato</a>
+
+            <div class="flex gap-6 justify-center mt-12">
+                <button class="theme-toggle" id="mobile-theme-toggle" style="width: 50px; height: 50px;">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button id="mobile-lang-change" class="px-5 py-2 border rounded-full text-lg">PT</button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero -->
+        <section id="home" class="hero">
+            <div class="split-container">
+                <div class="split-half">
+                    <div class="split-photo-container">
+                        <div class="split-photo left-photo"></div>
+                        <div class="split-overlay"></div>
+                    </div>
+                    <div class="split-content">
+                        <h1 class="split-title futuristic-heading">UX Design <span>Criativo</span></h1>
+                        <p class="split-subtitle" data-i18n="hero.design">Experiências visuais únicas</p>
+                        <a href="#projetos" class="btn" data-i18n="hero.explore">Explorar</a>
+                    </div>
+                </div>
+                <div class="split-half">
+                    <div class="split-photo-container">
+                        <div class="split-photo right-photo"></div>
+                        <div class="split-overlay"></div>
+                    </div>
+                    <div class="split-content">
+                        <h1 class="split-title futuristic-heading">Código <span>Inovador</span></h1>
+                        <p class="split-subtitle" data-i18n="hero.code">Soluções robustas</p>
+                        <a href="#projetos" class="btn" data-i18n="hero.view">Ver Projetos</a>
+                    </div>
+                </div>
+                <div class="scroll-indicator">
+                    <span data-i18n="hero.scroll">Rolar</span>
+                    <div class="scroll-arrow"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sobre -->
+        <section id="sobre" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading" data-i18n="about.title">Sobre a Agência</h2>
+                    <p class="section-subtitle" data-i18n="about.subtitle">Designer & Desenvolvedor</p>
+                </div>
+                <div class="about-grid">
+                    <div class="about-content glass-card">
+                        <p class="about-text" data-i18n="about.description">Designer e desenvolvedor apaixonado por
+                            criar experiências únicas que unem estética e funcionalidade. Combinando design thinking com
+                            código de qualidade para entregar soluções que realmente fazem a diferença.</p>
+                        <div class="skills">
+                            <h3 style="margin-bottom: 1rem; color: var(--color-accent);" data-i18n="about.skills">
+                                Habilidades</h3>
+                            <div class="skill-tags">
+                                <span>UI/UX</span>
+                                <span>Branding</span>
+                                <span>Figma</span>
+                                <span>React</span>
+                                <span>Three.js</span>
+                                <span>GSAP</span>
+                                <span>Node.js</span>
+                                <span>Python</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <div class="image-container">
+                            <img src="https://marcio-maker.github.io/Portifolio.03/image-min.gif" alt="Profile">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Serviços Carrossel -->
+        <section id="servicos" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading" data-i18n="services.title">Serviços</h2>
+                    <p class="section-subtitle" data-i18n="services.subtitle">O que posso fazer por você</p>
+                </div>
+
+                <div class="carousel-section">
+                    <div class="carousel-container" id="services-carousel">
+                        <div class="carousel-track" id="services-track">
+                            <!-- Serviços serão inseridos via JS -->
+                        </div>
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="services-prev"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button class="carousel-btn" id="services-next"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="carousel-indicators" id="services-indicators"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFÓLIO (Destaques - 8 projetos selecionados) -->
+        <section id="portfolio" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading">Portfólio em Destaque</h2>
+                    <p class="section-subtitle">Projetos selecionados que representam meu melhor trabalho</p>
+                </div>
+
+                <div class="carousel-section">
+                    <div class="carousel-container" id="portfolio-carousel">
+                        <div class="carousel-track" id="portfolio-track">
+                            <!-- Portfólio será inserido via JS -->
+                        </div>
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="portfolio-prev"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button class="carousel-btn" id="portfolio-next"><i
+                                class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="carousel-indicators" id="portfolio-indicators"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJETOS (Todos os 20 projetos) -->
+        <section id="projetos" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading" data-i18n="projects.title">Todos os Projetos</h2>
+                    <p class="section-subtitle" data-i18n="projects.subtitle">20 projetos reais desenvolvidos</p>
+                </div>
+
+                <!-- Filtros -->
+                <div class="filters" id="project-filters">
+                    <button class="filter-btn active" data-filter="all">Todos (20)</button>
+                    <button class="filter-btn" data-filter="concluido">✅ Concluídos</button>
+                    <button class="filter-btn" data-filter="processo">⚙️ Em desenvolvimento</button>
+                </div>
+
+                <div class="carousel-section">
+                    <div class="carousel-container" id="projects-carousel">
+                        <div class="carousel-track" id="projects-track">
+                            <!-- Projetos serão inseridos via JS -->
+                        </div>
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="projects-prev"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button class="carousel-btn" id="projects-next"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+
+                    <div class="carousel-indicators" id="projects-indicators"></div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="projects-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loja -->
+        <section id="loja" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading">Loja</h2>
+                    <p class="section-subtitle">Assets digitais e templates</p>
+                </div>
+                <div class="carousel-section">
+                    <div class="carousel-container" id="shop-carousel">
+                        <div class="carousel-track" id="shop-track">
+                            <!-- Loja será inserida via JS -->
+                        </div>
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="shop-prev"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button class="carousel-btn" id="shop-next"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="carousel-indicators" id="shop-indicators"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog -->
+        <section id="blog" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading">Blog</h2>
+                    <p class="section-subtitle">Insights e novidades</p>
+                </div>
+                <div class="carousel-section">
+                    <div class="carousel-container" id="blog-carousel">
+                        <div class="carousel-track" id="blog-track">
+                            <!-- Blog será inserido via JS -->
+                        </div>
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="blog-prev"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button class="carousel-btn" id="blog-next"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="carousel-indicators" id="blog-indicators"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contato -->
+        <section id="contato" class="section animate-on-scroll">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title futuristic-heading" data-i18n="contact.title">Contato</h2>
+                    <p class="section-subtitle" data-i18n="contact.subtitle">Vamos trabalhar juntos</p>
+                </div>
+
+                <div class="contact-links">
+                    <div class="contact-link glass-card">
+                        <span class="link-label" data-i18n="contact.email">Email</span>
+                        <a href="mailto:ma.gemelli2020@gmail.com" class="link-value">ma.gemelli2020@gmail.com</a>
+                    </div>
+                    <div class="contact-link glass-card">
+                        <span class="link-label">LinkedIn</span>
+                        <a href="https://linkedin.com/in/márciogemelli" class="link-value"
+                            target="_blank">/in/márciogemelli</a>
+                    </div>
+                    <div class="contact-link glass-card">
+                        <span class="link-label">GitHub</span>
+                        <a href="https://github.com/marcio-maker" class="link-value" target="_blank">/marcio-maker</a>
+                    </div>
+                    <div class="contact-link glass-card">
+                        <span class="link-label">Behance</span>
+                        <a href="https://behance.net/marcio-maker" class="link-value" target="_blank">/marcio-maker</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-text">© 2026 Marcio Maker | Studio. Todos os direitos reservados.</div>
+            <div class="social-links">
+                <a href="https://github.com/marcio-maker" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/márciogemelli" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://behance.net/marcio-maker" target="_blank"><i class="fab fa-behance"></i></a>
+                <a href="https://instagram.com/marcio.maker" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp e Back to Top -->
+    <a href="https://wa.me/5511914809693?text=Olá!%20Gostaria%20de%20mais%20informações" class="whatsapp-float"
+        target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <button id="back-to-top" aria-label="Voltar ao topo">↑</button>
+
+    <!-- Modal de Serviços -->
+    <div class="modal-overlay" id="serviceModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeServiceModal()">&times;</button>
+            <div id="serviceModalBody" class="service-detail">
+                <!-- Conteúdo será preenchido via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Processo -->
+    <div class="modal-overlay" id="processoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProcessoModal()">&times;</button>
+
+            <div class="timeline" id="timeline">
+                <!-- Timeline será preenchida via JavaScript -->
+            </div>
+
+            <div class="files-section">
+                <h3>📁 Arquivos do Projeto</h3>
+                <div class="files-grid" id="filesGrid">
+                    <!-- Arquivos serão preenchidos via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Produto Individual -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            <div id="productModalBody" class="product-detail">
+                <!-- Conteúdo será preenchido via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Artigo Individual -->
+    <div class="modal-overlay" id="articleModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeArticleModal()">&times;</button>
+            <div id="articleModalBody" class="article-detail">
+                <!-- Conteúdo será preenchido via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Padrão (para seções em breve) -->
+    <div class="modal-overlay" id="defaultModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDefaultModal()">&times;</button>
+            <div style="text-align: center; padding: 2rem;">
+                <i class="fa-solid fa-rocket"
+                    style="font-size: 4rem; color: var(--color-accent); margin-bottom: 1rem;"></i>
+                <p style="color: var(--color-text-secondary); font-size: 1.1rem;">Esta seção está sendo desenvolvida e
+                    estará disponível em breve.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== TRADUÇÕES =====
+        const translations = {
+            pt: {
+                'nav.home': 'Início',
+                'nav.about': 'Sobre',
+                'nav.services': 'Serviços',
+                'nav.projects': 'Projetos',
+                'nav.contact': 'Contato',
+                'hero.design': 'Experiências visuais únicas',
+                'hero.code': 'Soluções robustas',
+                'hero.explore': 'Explorar',
+                'hero.view': 'Ver Projetos',
+                'hero.scroll': 'Rolar',
+                'about.title': 'Sobre a Agência',
+                'about.subtitle': 'Designer & Desenvolvedor',
+                'about.description': 'Designer e desenvolvedor apaixonado por criar experiências únicas que unem estética e funcionalidade. Combinando design thinking com código de qualidade para entregar soluções que realmente fazem a diferença.',
+                'about.skills': 'Habilidades',
+                'services.title': 'Serviços',
+                'services.subtitle': 'O que posso fazer por você',
+                'projects.title': 'Todos os Projetos',
+                'projects.subtitle': '20 projetos reais desenvolvidos',
+                'contact.title': 'Contato',
+                'contact.subtitle': 'Vamos trabalhar juntos',
+                'contact.email': 'Email',
+                'modal.close': 'Fechar'
+            },
+            en: {
+                'nav.home': 'Home',
+                'nav.about': 'About',
+                'nav.services': 'Services',
+                'nav.projects': 'Projects',
+                'nav.contact': 'Contact',
+                'hero.design': 'Unique visual experiences',
+                'hero.code': 'Robust solutions',
+                'hero.explore': 'Explore',
+                'hero.view': 'View Projects',
+                'hero.scroll': 'Scroll',
+                'about.title': 'About the Agency',
+                'about.subtitle': 'Designer & Developer',
+                'about.description': 'Designer and developer passionate about creating unique experiences that combine aesthetics and functionality. Combining design thinking with quality code to deliver solutions that really make a difference.',
+                'about.skills': 'Skills',
+                'services.title': 'Services',
+                'services.subtitle': 'What I can do for you',
+                'projects.title': 'All Projects',
+                'projects.subtitle': '20 real projects developed',
+                'contact.title': 'Contact',
+                'contact.subtitle': "Let's work together",
+                'contact.email': 'Email',
+                'modal.close': 'Close'
+            },
+            es: {
+                'nav.home': 'Inicio',
+                'nav.about': 'Sobre',
+                'nav.services': 'Servicios',
+                'nav.projects': 'Proyectos',
+                'nav.contact': 'Contacto',
+                'hero.design': 'Experiencias visuales únicas',
+                'hero.code': 'Soluciones robustas',
+                'hero.explore': 'Explorar',
+                'hero.view': 'Ver Proyectos',
+                'hero.scroll': 'Desplazar',
+                'about.title': 'Sobre la Agencia',
+                'about.subtitle': 'Diseñador & Desarrollador',
+                'about.description': 'Diseñador y desarrollador apasionado por crear experiencias únicas que combinan estética y funcionalidad. Combinando design thinking con código de calidad para entregar soluciones que realmente marcan la diferencia.',
+                'about.skills': 'Habilidades',
+                'services.title': 'Servicios',
+                'services.subtitle': 'Lo que puedo hacer por ti',
+                'projects.title': 'Todos los Proyectos',
+                'projects.subtitle': '20 proyectos reales desarrollados',
+                'contact.title': 'Contacto',
+                'contact.subtitle': 'Trabajemos juntos',
+                'contact.email': 'Correo',
+                'modal.close': 'Cerrar'
+            }
+        };
+
+        // ===== DADOS DOS SERVIÇOS =====
+        const servicesData = [
+            {
+                icon: 'fa-object-group',
+                title: 'UX/UI & Product Design',
+                description: 'Criação de interfaces estratégicas, focadas em experiência, conversão e identidade digital.',
+                longDescription: 'Desenvolvemos produtos digitais com foco em experiência do usuário e design estratégico. Desde a pesquisa inicial até a entrega final, criamos interfaces que não apenas são bonitas, mas também funcionais e intuitivas.',
+                tags: ['Figma', 'Wireframes', 'Design System', 'Prototipação', 'User Research', 'Testes A/B'],
+                price: 'Projetos personalizados',
+                features: ['Design System completo', 'Prototipagem interativa', 'Testes de usabilidade', 'Análise de métricas']
+            },
+            {
+                icon: 'fa-code',
+                title: 'Desenvolvimento Full Stack',
+                description: 'Aplicações web completas com foco em performance, escalabilidade e arquitetura moderna.',
+                longDescription: 'Criamos aplicações web robustas utilizando as mais modernas tecnologias do mercado. Do front-end ao back-end, entregamos soluções completas e escaláveis.',
+                tags: ['React', 'Next.js', 'Node.js', 'Supabase', 'TypeScript', 'PostgreSQL'],
+                price: 'Sob demanda',
+                features: ['API RESTful', 'Banco de dados otimizado', 'Autenticação segura', 'Deploy automatizado']
+            },
+            {
+                icon: 'fa-store',
+                title: 'E-commerce & Plataformas',
+                description: 'Criação de lojas, sistemas de vendas e plataformas digitais completas.',
+                longDescription: 'Desenvolvemos soluções completas de e-commerce com carrinho de compras, gateway de pagamento e gestão de produtos. Ideal para quem quer vender online.',
+                tags: ['StoreApp', 'SuperFlix', 'Landing Pages', 'Pagamentos', 'Carrinho'],
+                price: 'Sob orçamento',
+                features: ['Carrinho de compras', 'Múltiplos gateways', 'Gestão de estoque', 'Relatórios de vendas']
+            },
+            {
+                icon: 'fa-robot',
+                title: 'IA & Automação',
+                description: 'Soluções com inteligência artificial aplicada a negócios e produtos digitais.',
+                longDescription: 'Implementamos soluções de IA para automatizar processos, analisar dados e criar experiências personalizadas para seus usuários.',
+                tags: ['Maker AI Studio', 'Automação', 'APIs Inteligentes', 'Machine Learning', 'Chatbots'],
+                price: 'Projetos avançados',
+                features: ['Modelos personalizados', 'APIs de IA', 'Automação de processos', 'Análise preditiva']
+            },
+            {
+                icon: 'fa-cube',
+                title: '3D & Experiências Imersivas',
+                description: 'Interfaces interativas com WebGL, Three.js e experiências 3D na web.',
+                longDescription: 'Criamos experiências imersivas em 3D diretamente no navegador. Ideal para apresentações de produtos, jogos e sites interativos.',
+                tags: ['Web3D', 'Scanner3D', 'Parallax', 'Three.js', 'WebGL', 'Realidade Aumentada'],
+                price: 'Projetos criativos',
+                features: ['Modelos 3D interativos', 'Animações realistas', 'Otimização mobile', 'Integração com WebGL']
+            },
+            {
+                icon: 'fa-chart-line',
+                title: 'Sistemas & Dashboards',
+                description: 'Painéis administrativos, ERP e sistemas para gestão e tomada de decisão.',
+                longDescription: 'Desenvolvemos sistemas completos de gestão com dashboards interativos, relatórios em tempo real e controle total sobre seus dados.',
+                tags: ['ERP Salão', 'PWA Hair Style', 'Apps Web', 'Dashboards', 'Gráficos'],
+                price: 'Sob consulta',
+                features: ['Dashboards em tempo real', 'Exportação de relatórios', 'Controle de acesso', 'Integração com APIs']
+            }
+        ];
+
+        // ===== 20 PROJETOS REAIS DO SLIDES.HTML =====
+        const projectsData = [
+            {
+                id: 1,
+                title: 'Flower Shop',
+                description: 'E-commerce de flores com foco em UI moderna e experiência fluida.',
+                image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=80',
+                tags: ['E-commerce', 'UI/UX', 'Responsivo'],
+                demoUrl: 'https://marcio-maker.github.io/Flower-Shop/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 2,
+                title: 'Scanner 3D',
+                description: 'Experiência interativa com visualização e manipulação 3D na web.',
+                image: 'https://images.unsplash.com/photo-1633412802994-5c058f151b66?auto=format&fit=crop&w=1000&q=80',
+                tags: ['3D', 'WebGL', 'Interatividade'],
+                demoUrl: 'https://marcio-maker.github.io/Scaner3D/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 3,
+                title: 'Wayne Enterprises',
+                description: 'Landing page corporativa com design moderno e responsivo.',
+                image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Landing Page', 'Corporativo', 'Responsivo'],
+                demoUrl: 'https://marcio-maker.github.io/WAYNE_ENTERPRISES.01/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 4,
+                title: 'Flow',
+                description: 'Experimento visual interativo com animações fluidas.',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Animação', 'UI', 'Experimental'],
+                demoUrl: 'https://marcio-maker.github.io/FLOW/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 5,
+                title: 'Maker AI Studio',
+                description: 'Ferramenta de criação com inteligência artificial aplicada.',
+                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80',
+                tags: ['IA', 'Plataforma', 'Web App'],
+                demoUrl: 'https://maker-ai-studio.vercel.app/',
+                status: 'processo',
+                badge: 'Em desenvolvimento'
+            },
+            {
+                id: 6,
+                title: 'Maker AI Studio v2',
+                description: 'Nova versão da ferramenta Maker AI com recursos avançados.',
+                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80',
+                tags: ['IA', 'V2', 'Web App'],
+                demoUrl: 'https://maker-ai-studio-tbx2.vercel.app/',
+                status: 'processo',
+                badge: 'Em desenvolvimento'
+            },
+            {
+                id: 7,
+                title: 'Landing Page',
+                description: 'Landing page responsiva de alta conversão.',
+                image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Marketing', 'Conversão', 'Responsivo'],
+                demoUrl: 'https://marcio-maker.github.io/LandingPage/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 8,
+                title: 'Agência Maker IA',
+                description: 'Site institucional para agência de IA e inovação.',
+                image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Institucional', 'IA', 'Moderno'],
+                demoUrl: 'https://agencia-maker-ia.vercel.app/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 9,
+                title: 'PWA Hair Style Pro',
+                description: 'Simulador de cortes de cabelo com tecnologia PWA.',
+                image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=80',
+                tags: ['PWA', 'Beleza', 'Simulador'],
+                demoUrl: 'https://marcio-maker.github.io/PWA-Hair-Style-Pro/',
+                status: 'processo',
+                badge: 'Em desenvolvimento'
+            },
+            {
+                id: 10,
+                title: 'Curso AHA',
+                description: 'Plataforma de curso online com conteúdo interativo.',
+                image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Educação', 'EAD', 'Plataforma'],
+                demoUrl: 'https://appcursoaha.netlify.app/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 11,
+                title: 'SuperFlix',
+                description: 'Interface de streaming com navegação dinâmica e visual moderno.',
+                image: 'https://images.unsplash.com/photo-1585951237318-9ea5e175b891?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Streaming', 'UI', 'Frontend'],
+                demoUrl: 'https://marcio-maker.github.io/SuperFlix/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 12,
+                title: 'ERP Salão',
+                description: 'Sistema completo de gestão para salão de beleza.',
+                image: 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=80',
+                tags: ['ERP', 'Gestão', 'Sistema Web'],
+                demoUrl: 'https://erp-salao-git-main-marcio-makers-projects.vercel.app/',
+                status: 'processo',
+                badge: 'Em desenvolvimento'
+            },
+            {
+                id: 13,
+                title: 'Web3D Experience',
+                description: 'Exploração de ambientes tridimensionais e interação em tempo real.',
+                image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Three.js', '3D', 'Experiência'],
+                demoUrl: 'https://marcio-maker.github.io/Web3D/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 14,
+                title: 'UP App',
+                description: 'Aplicação web interativa com design moderno.',
+                image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Web App', 'UI', 'Interativo'],
+                demoUrl: 'https://up-app-seven.vercel.app/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 15,
+                title: 'Prototype 01',
+                description: 'Protótipo experimental de interface inovadora.',
+                image: 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Protótipo', 'Experimental', 'UI'],
+                demoUrl: 'https://marcio-maker.github.io/Prototipo_01/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 16,
+                title: 'Web Parallax',
+                description: 'Site com efeitos parallax e animações suaves.',
+                image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Parallax', 'Animações', 'Scroll'],
+                demoUrl: 'https://marcio-maker.github.io/WebParallax/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 17,
+                title: 'Diagnóstico Facial',
+                description: 'Protótipo digital para análise facial aplicada à área da beleza.',
+                image: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1000&q=80',
+                tags: ['IA', 'Beleza Tech', 'Análise'],
+                demoUrl: 'https://marcio-maker.github.io/DIAGNOSTICOFACIAL/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 18,
+                title: 'Store App',
+                description: 'Aplicação de loja virtual com carrinho e checkout.',
+                image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1000&q=80',
+                tags: ['E-commerce', 'Loja', 'Carrinho'],
+                demoUrl: 'https://marcio-maker.github.io/StoreApp/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 19,
+                title: 'Serraventura',
+                description: 'Site turístico experimental com design imersivo.',
+                image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80',
+                tags: ['Turismo', 'Experimental', 'Imersivo'],
+                demoUrl: 'https://marcio-maker.github.io/Serraventura/',
+                status: 'concluido',
+                badge: 'Concluído'
+            },
+            {
+                id: 20,
+                title: 'Flow UI',
+                description: 'Experimento visual de interface com animações.',
+                image: 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1000&q=80',
+                tags: ['UI', 'Animações', 'Experimental'],
+                demoUrl: 'https://marcio-maker.github.io/FLOW/',
+                status: 'concluido',
+                badge: 'Concluído'
+            }
+        ];
+
+        // ===== DADOS DA LOJA (PRODUTOS INDIVIDUAIS) =====
+        const shopData = [
+            {
+                id: 1,
+                icon: 'fa-box',
+                title: 'ERP Salão (Versão Pro)',
+                description: 'Sistema completo para gestão de salões de beleza',
+                longDescription: 'Sistema ERP desenvolvido especificamente para salões de beleza, barbearias e clínicas de estética. Gerencie clientes, agendamentos, financeiro e muito mais em uma única plataforma.',
+                price: 'R$ 997,00',
+                features: [
+                    'Gestão completa de clientes com histórico',
+                    'Agendamentos online com confirmação automática',
+                    'Controle financeiro com relatórios detalhados',
+                    'Gestão de comissões de funcionários',
+                    'Estoque de produtos',
+                    'Relatórios personalizados'
+                ],
+                demoUrl: 'https://erp-salao-git-main-marcio-makers-projects.vercel.app',
+                category: 'Sistema',
+                specs: ['Atualizações inclusas', 'Suporte 24/7', 'Instalação gratuita']
+            },
+            {
+                id: 2,
+                icon: 'fa-robot',
+                title: 'Maker AI Studio',
+                description: 'Plataforma de IA para criação de conteúdo',
+                longDescription: 'Plataforma completa com inteligência artificial para criação de conteúdo, análise de dados e automação de processos. Ideal para empresas que querem inovar com IA.',
+                price: 'R$ 1.497,00',
+                features: [
+                    'Geração de textos com IA',
+                    'Análise de sentimentos',
+                    'Chatbot personalizável',
+                    'API completa para integração',
+                    'Dashboard analítico',
+                    'Treinamento incluso'
+                ],
+                demoUrl: 'https://maker-ai-studio.vercel.app',
+                category: 'IA',
+                specs: ['1 ano de atualizações', 'Suporte prioritário', 'Documentação completa']
+            },
+            {
+                id: 3,
+                icon: 'fa-cut',
+                title: 'Hair Style Pro PWA',
+                description: 'Aplicativo PWA para barbearias e salões',
+                longDescription: 'Aplicativo Progressive Web App (PWA) para barbearias e salões de beleza. Funciona offline, envia notificações push e pode ser instalado no celular como um app nativo.',
+                price: 'R$ 697,00',
+                features: [
+                    'Modo offline completo',
+                    'Notificações push para clientes',
+                    'Agendamentos integrados',
+                    'Perfil profissional',
+                    'Galeria de trabalhos',
+                    'Avaliações e feedbacks'
+                ],
+                demoUrl: 'https://marcio-maker.github.io/PWA-Hair-Style-Pro',
+                category: 'PWA',
+                specs: ['Código fonte incluso', 'Hospedagem gratuita', 'Suporte por 6 meses']
+            },
+            {
+                id: 4,
+                icon: 'fa-cube',
+                title: 'Web3D Templates',
+                description: 'Kit de templates 3D para websites',
+                longDescription: 'Kit com 5 templates 3D prontos para usar em websites. Ideal para portfólios, landing pages e sites criativos. Todos os templates são responsivos e otimizados.',
+                price: 'R$ 297,00',
+                features: [
+                    '5 templates exclusivos',
+                    'Código fonte completo',
+                    'Documentação detalhada',
+                    'Suporte para personalização',
+                    'Compatível com Three.js',
+                    'Animações inclusas'
+                ],
+                demoUrl: 'https://marcio-maker.github.io/Web3D',
+                category: '3D',
+                specs: ['Arquivos .blend', 'Código JavaScript', 'Tutorial em vídeo']
+            },
+            {
+                id: 5,
+                icon: 'fa-paint-brush',
+                title: 'UI Kit Pro',
+                description: 'Kit de componentes UI para designers',
+                longDescription: 'Kit completo com mais de 200 componentes UI prontos para Figma. Ideal para designers e desenvolvedores que querem acelerar seu workflow.',
+                price: 'R$ 197,00',
+                features: [
+                    '200+ componentes',
+                    'Arquivo Figma incluso',
+                    'Design system completo',
+                    'Atualizações vitalícias',
+                    'Tipografia e cores definidas',
+                    'Ícones exclusivos'
+                ],
+                demoUrl: 'https://marcio-maker.github.io/Prototipo_01',
+                category: 'Design',
+                specs: ['Figma file', 'Guia de estilos', 'Suporte por email']
+            },
+            {
+                id: 6,
+                icon: 'fa-code',
+                title: 'Boilerplate Full Stack',
+                description: 'Template completo para aplicações web',
+                longDescription: 'Boilerplate completo com React, Node.js e banco de dados. Inclui autenticação, rotas protegidas e estrutura pronta para deploy.',
+                price: 'R$ 397,00',
+                features: [
+                    'React + Node.js configurado',
+                    'Autenticação JWT',
+                    'Banco de dados PostgreSQL',
+                    'Deploy configurado',
+                    'Estrutura de pastas organizada',
+                    'Documentação completa'
+                ],
+                demoUrl: 'https://marcio-maker.github.io/LandingPage',
+                category: 'Desenvolvimento',
+                specs: ['Código fonte', 'Scripts de deploy', 'Suporte por 3 meses']
+            }
+        ];
+
+        // ===== DADOS DO BLOG (ARTIGOS INDIVIDUAIS) =====
+        const blogData = [
+            {
+                id: 1,
+                category: 'Full Stack',
+                title: 'Arquitetura Moderna para Web Apps',
+                excerpt: 'Aprenda como estruturar aplicações escaláveis e performáticas usando as melhores práticas do mercado.',
+                content: 'Neste artigo, vamos explorar as melhores práticas para arquitetura de aplicações web modernas. Discutiremos padrões de projeto, escalabilidade, performance e muito mais. Desde a escolha das tecnologias até o deploy em produção, você aprenderá como criar aplicações robustas e de fácil manutenção.',
+                date: '15 Mar 2026',
+                readTime: '8 min',
+                url: 'artigo/arquitetura-web.html',
+                tags: ['React', 'Node.js', 'Arquitetura', 'Performance']
+            },
+            {
+                id: 2,
+                category: 'UX Design',
+                title: 'UX na Prática: Da Ideia ao Produto',
+                excerpt: 'Um guia completo sobre o processo de design thinking e como aplicá-lo em projetos reais.',
+                content: 'O design thinking é uma abordagem poderosa para resolver problemas complexos. Neste artigo, vamos passar por todas as etapas: empatia, definição, ideação, prototipagem e testes. Com exemplos práticos e cases reais, você aprenderá como aplicar UX no seu dia a dia.',
+                date: '10 Mar 2026',
+                readTime: '12 min',
+                url: 'artigo/ux-pratica.html',
+                tags: ['UX', 'Design Thinking', 'Prototipagem', 'Pesquisa']
+            },
+            {
+                id: 3,
+                category: 'IA & Futuro',
+                title: 'IA Aplicada a Negócios Digitais',
+                excerpt: 'Descubra como a inteligência artificial pode transformar seu negócio e gerar valor real.',
+                content: 'A inteligência artificial está revolucionando a forma como fazemos negócios. Neste artigo, exploramos casos reais de empresas que implementaram IA com sucesso, desde chatbots até sistemas de recomendação. Aprenda como começar e quais ferramentas utilizar.',
+                date: '05 Mar 2026',
+                readTime: '10 min',
+                url: 'artigo/ia-negocios.html',
+                tags: ['IA', 'Machine Learning', 'Inovação', 'Negócios']
+            },
+            {
+                id: 4,
+                category: 'Frontend',
+                title: 'Animações com GSAP e Three.js',
+                excerpt: 'Tutorial completo para criar animações impressionantes usando as melhores bibliotecas.',
+                content: 'GSAP e Three.js são duas das bibliotecas mais poderosas para animações na web. Neste tutorial, vamos criar animações complexas, desde efeitos de scroll até modelos 3D interativos. Código passo a passo e exemplos práticos inclusos.',
+                date: '28 Fev 2026',
+                readTime: '15 min',
+                url: 'artigo/animacoes-gsap.html',
+                tags: ['GSAP', 'Three.js', 'Animações', 'WebGL']
+            },
+            {
+                id: 5,
+                category: 'E-commerce',
+                title: 'Como Criar uma Loja Virtual de Sucesso',
+                excerpt: 'Estratégias e melhores práticas para lançar e gerenciar seu e-commerce.',
+                content: 'Lançar um e-commerce envolve muito mais do que apenas colocar produtos online. Neste artigo, abordamos desde a escolha da plataforma até estratégias de marketing e retenção de clientes. Dicas práticas baseadas em experiência real.',
+                date: '20 Fev 2026',
+                readTime: '10 min',
+                url: 'artigo/ecommerce-sucesso.html',
+                tags: ['E-commerce', 'Marketing', 'Vendas', 'Estratégia']
+            },
+            {
+                id: 6,
+                category: 'Carreira',
+                title: 'Como se Tornar um Desenvolvedor Full Stack',
+                excerpt: 'Guia de carreira com roadmap completo e recursos para estudar.',
+                content: 'Se você quer se tornar um desenvolvedor full stack, este guia é para você. Com um roadmap detalhado, recursos de estudo e dicas de carreira, você saberá exatamente o que estudar e em que ordem. Do iniciante ao avançado.',
+                date: '15 Fev 2026',
+                readTime: '12 min',
+                url: 'artigo/dev-fullstack.html',
+                tags: ['Carreira', 'Estudos', 'Roadmap', 'Desenvolvimento']
+            }
+        ];
+
+        // Dados dos processos (timeline e arquivos)
+        const processosData = {
+            1: {
+                title: 'Flower Shop',
+                timeline: [
+                    { date: '10/01/2024', title: 'Planejamento', description: 'Definição do escopo do e-commerce', tags: ['HTML', 'CSS', 'JavaScript'] },
+                    { date: '15/01/2024', title: 'Design', description: 'Criação do layout no Figma', tags: ['Figma', 'UI/UX'] },
+                    { date: '20/01/2024', title: 'Desenvolvimento', description: 'Implementação do front-end', tags: ['HTML', 'CSS', 'JS'] },
+                    { date: '25/01/2024', title: 'Testes', description: 'Testes de responsividade', tags: ['QA', 'Mobile'] }
+                ],
+                files: [
+                    { name: 'flower-shop.zip', size: '1.2 MB', icon: '📦' },
+                    { name: 'layout.fig', size: '3.5 MB', icon: '🎨' }
+                ]
+            },
+            2: {
+                title: 'Scanner 3D',
+                timeline: [
+                    { date: '05/02/2024', title: 'Pesquisa', description: 'Estudo de bibliotecas 3D', tags: ['Three.js', 'WebGL'] },
+                    { date: '10/02/2024', title: 'Prototipagem', description: 'Criação do primeiro modelo', tags: ['3D', 'Modelagem'] },
+                    { date: '15/02/2024', title: 'Implementação', description: 'Integração com Three.js', tags: ['JavaScript', 'Three.js'] }
+                ],
+                files: [
+                    { name: 'scanner3d.zip', size: '2.8 MB', icon: '📦' },
+                    { name: 'models.zip', size: '5.1 MB', icon: '🎲' }
+                ]
+            },
+            5: {
+                title: 'Maker AI Studio',
+                timeline: [
+                    { date: '01/03/2024', title: 'Conceito', description: 'Definição da plataforma de IA', tags: ['IA', 'Conceito'] },
+                    { date: '10/03/2024', title: 'Desenvolvimento', description: 'Implementação inicial', tags: ['Python', 'API'] },
+                    { date: '20/03/2024', title: 'Testes', description: 'Testes com usuários', tags: ['UX', 'Feedback'] }
+                ],
+                files: [
+                    { name: 'maker-ai.zip', size: '3.2 MB', icon: '📦' }
+                ]
+            },
+            12: {
+                title: 'ERP Salão',
+                timeline: [
+                    { date: '01/04/2024', title: 'Análise', description: 'Levantamento de requisitos', tags: ['Análise', 'Requisitos'] },
+                    { date: '10/04/2024', title: 'Desenvolvimento', description: 'Criação dos módulos', tags: ['React', 'Node.js'] },
+                    { date: '20/04/2024', title: 'Testes', description: 'Testes com usuários reais', tags: ['QA', 'Feedback'] }
+                ],
+                files: [
+                    { name: 'erp-salao.zip', size: '4.5 MB', icon: '📦' },
+                    { name: 'database.sql', size: '0.8 MB', icon: '🗄️' }
+                ]
+            }
+        };
+
+        // ===== VARIÁVEIS GLOBAIS =====
+        let currentLang = 'pt';
+
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Primeiro verifica se já tem idioma salvo
+            const savedLang = localStorage.getItem('language');
+            if (savedLang) {
+                currentLang = savedLang;
+                translatePage(savedLang);
+                // Esconde o seletor de idioma imediatamente
+                const selector = document.getElementById('lang-selector');
+                if (selector) {
+                    selector.classList.add('hidden');
+                }
+            }
+
+            // Inicia o splash e outras funções
+            initSplash();
+            initTheme();
+            initMobileMenu();
+            initBackToTop();
+            initCarousels();
+            initScrollAnimations();
+            initParticles();
+            initThreeJS();
+            initDragScroll();
+
+            setTimeout(() => {
+                document.querySelector('.header').classList.add('visible');
+            }, 1000);
+
+            // Inicia o seletor de idioma apenas se não tiver idioma salvo
+            if (!savedLang) {
+                initLangSelector();
+            }
+
+            // Inicia autoplay após carregar todos os carrosséis
+            setTimeout(() => {
+                initCarouselAutoplay();
+            }, 2000);
+        });
+
+        // ===== AUTOPLAY DOS CARROSSÉIS =====
+        function initCarouselAutoplay() {
+            const carousels = [
+                { 
+                    name: 'services', 
+                    track: document.getElementById('services-track'), 
+                    interval: 4000,
+                    direction: 1
+                },
+                { 
+                    name: 'portfolio', 
+                    track: document.getElementById('portfolio-track'), 
+                    interval: 4500,
+                    direction: -1
+                },
+                { 
+                    name: 'projects', 
+                    track: document.getElementById('projects-track'), 
+                    interval: 5000,
+                    direction: 1
+                },
+                { 
+                    name: 'shop', 
+                    track: document.getElementById('shop-track'), 
+                    interval: 4200,
+                    direction: -1
+                },
+                { 
+                    name: 'blog', 
+                    track: document.getElementById('blog-track'), 
+                    interval: 4800,
+                    direction: 1
+                }
+            ];
+            
+            carousels.forEach(carousel => {
+                if (!carousel.track) return;
+                
+                let autoplayInterval;
+                let isPaused = false;
+                let currentDirection = carousel.direction;
+                
+                function getSlideWidth() {
+                    const firstSlide = carousel.track.querySelector('.carousel-slide:not([style*="display: none"])');
+                    if (!firstSlide) return 350;
+                    
+                    const style = window.getComputedStyle(firstSlide);
+                    const marginRight = parseFloat(style.marginRight) || 0;
+                    const marginLeft = parseFloat(style.marginLeft) || 0;
+                    return firstSlide.offsetWidth + marginRight + marginLeft + 24;
+                }
+                
+                function moveNext() {
+                    if (isPaused) return;
+                    
+                    const slideWidth = getSlideWidth();
+                    const maxScroll = carousel.track.scrollWidth - carousel.track.clientWidth;
+                    const nextPosition = carousel.track.scrollLeft + slideWidth;
+                    
+                    if (nextPosition >= maxScroll - 10) {
+                        carousel.track.scrollTo({ left: 0, behavior: 'smooth' });
+                        currentDirection = -1;
+                    } else {
+                        carousel.track.scrollBy({ left: slideWidth, behavior: 'smooth' });
+                    }
+                }
+                
+                function movePrev() {
+                    if (isPaused) return;
+                    
+                    const slideWidth = getSlideWidth();
+                    const prevPosition = carousel.track.scrollLeft - slideWidth;
+                    
+                    if (prevPosition <= 10) {
+                        carousel.track.scrollTo({ 
+                            left: carousel.track.scrollWidth - carousel.track.clientWidth, 
+                            behavior: 'smooth' 
+                        });
+                        currentDirection = 1;
+                    } else {
+                        carousel.track.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+                    }
+                }
+                
+                function moveCarousel() {
+                    if (isPaused) return;
+                    
+                    if (Math.random() < 0.2) {
+                        currentDirection = currentDirection === 1 ? -1 : 1;
+                    }
+                    
+                    if (currentDirection === 1) {
+                        moveNext();
+                    } else {
+                        movePrev();
+                    }
+                }
+                
+                function startAutoplay() {
+                    if (autoplayInterval) clearInterval(autoplayInterval);
+                    autoplayInterval = setInterval(moveCarousel, carousel.interval);
+                }
+                
+                carousel.track.addEventListener('mouseenter', () => {
+                    isPaused = true;
+                });
+                
+                carousel.track.addEventListener('mouseleave', () => {
+                    setTimeout(() => {
+                        isPaused = false;
+                    }, 500);
+                });
+                
+                carousel.track.addEventListener('mousedown', () => {
+                    isPaused = true;
+                });
+                
+                carousel.track.addEventListener('mouseup', () => {
+                    setTimeout(() => {
+                        isPaused = false;
+                    }, 1000);
+                });
+                
+                carousel.track.addEventListener('scroll', () => {
+                    isPaused = true;
+                    clearTimeout(carousel.scrollTimeout);
+                    carousel.scrollTimeout = setTimeout(() => {
+                        isPaused = false;
+                    }, 2000);
+                });
+                
+                carousel.track.addEventListener('touchstart', () => {
+                    isPaused = true;
+                });
+                
+                carousel.track.addEventListener('touchend', () => {
+                    setTimeout(() => {
+                        isPaused = false;
+                    }, 1000);
+                });
+                
+                startAutoplay();
+            });
+        }
+
+        // ===== SPLASH SCREEN =====
+        function initSplash() {
+            const splash = document.getElementById('splash-screen');
+            const progress = document.getElementById('splash-progress');
+            const status = document.getElementById('splash-status');
+
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 12;
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        splash.classList.add('hidden');
+                    }, 500);
+                }
+                progress.style.width = width + '%';
+
+                if (width < 30) status.textContent = 'Inicializando...';
+                else if (width < 60) status.textContent = 'Carregando recursos...';
+                else if (width < 90) status.textContent = 'Preparando interface...';
+                else status.textContent = 'Pronto!';
+            }, 100);
+        }
+
+        // ===== SELECTOR DE IDIOMA =====
+        function initLangSelector() {
+            const selector = document.getElementById('lang-selector');
+
+            document.querySelectorAll('.lang-choice').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lang = btn.dataset.lang;
+                    localStorage.setItem('language', lang);
+                    selector.classList.add('hidden');
+                    currentLang = lang;
+                    translatePage(lang);
+                });
+            });
+
+            document.getElementById('lang-fallback').addEventListener('click', () => {
+                const browserLang = navigator.language.slice(0, 2);
+                const lang = ['pt', 'en', 'es'].includes(browserLang) ? browserLang : 'pt';
+                localStorage.setItem('language', lang);
+                selector.classList.add('hidden');
+                currentLang = lang;
+                translatePage(lang);
+            });
+        }
+
+        function translatePage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            const langBtn = document.getElementById('lang-change');
+            if (langBtn) langBtn.textContent = lang.toUpperCase();
+
+            const mobileLangBtn = document.getElementById('mobile-lang-change');
+            if (mobileLangBtn) mobileLangBtn.textContent = lang.toUpperCase();
+        }
+
+        // ===== TEMA =====
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+        document.getElementById('mobile-theme-toggle')?.addEventListener('click', toggleTheme);
+
+        // ===== MOBILE MENU =====
+        function initMobileMenu() {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            menuBtn.addEventListener('click', () => {
+                menuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menuBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // ===== BACK TO TOP =====
+        function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            window.addEventListener('scroll', () => {
+                btn.classList.toggle('visible', window.scrollY > 400);
+            });
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // ===== CARROSSÉIS =====
+        function initCarousels() {
+            // Services Carousel
+            const servicesTrack = document.getElementById('services-track');
+            servicesData.forEach(service => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <div class="carousel-card" onclick="openServiceModal('${service.title.replace(/'/g, "\\'")}', ${JSON.stringify(service).replace(/"/g, '&quot;')})">
+                        <i class="fa-solid ${service.icon} card-icon"></i>
+                        <h3 class="card-title">${service.title}</h3>
+                        <p class="card-description">${service.description}</p>
+                        <div class="card-tags">
+                            ${service.tags.slice(0, 4).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="card-footer">
+                            <span class="card-price">${service.price}</span>
+                            <span class="card-link">Saiba mais →</span>
+                        </div>
+                    </div>
+                `;
+                servicesTrack.appendChild(slide);
+            });
+
+            // PORTFÓLIO (Destaques - 8 projetos selecionados)
+            const portfolioTrack = document.getElementById('portfolio-track');
+            const portfolioProjects = [1, 2, 5, 8, 11, 13, 17, 18];
+            portfolioProjects.forEach(id => {
+                const project = projectsData.find(p => p.id === id);
+                if (!project) return;
+
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <div class="project-carousel-card">
+                        <span class="card-badge ${project.status === 'processo' ? 'processo' : ''}">${project.badge}</span>
+                        <div class="project-card-image">
+                            <img src="${project.image}" alt="${project.title}" loading="lazy">
+                        </div>
+                        <div class="project-card-content">
+                            <h3 class="project-card-title">${project.title}</h3>
+                            <p class="project-card-description">${project.description}</p>
+                            <div class="card-tags">
+                                ${project.tags.slice(0, 3).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="button-container">
+                                <button class="btn-demo" onclick="event.stopPropagation(); openDemo('${project.demoUrl}')">🚀 Demo</button>
+                                <button class="btn-processo" onclick="event.stopPropagation(); openProcesso(${project.id})">📋 Processo</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                portfolioTrack.appendChild(slide);
+            });
+
+            // PROJETOS (Todos os 20 projetos)
+            const projectsTrack = document.getElementById('projects-track');
+            projectsData.forEach(project => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.setAttribute('data-status', project.status);
+                slide.innerHTML = `
+                    <div class="project-carousel-card">
+                        <span class="card-badge ${project.status === 'processo' ? 'processo' : ''}">${project.badge}</span>
+                        <div class="project-card-image">
+                            <img src="${project.image}" alt="${project.title}" loading="lazy">
+                        </div>
+                        <div class="project-card-content">
+                            <h3 class="project-card-title">${project.title}</h3>
+                            <p class="project-card-description">${project.description}</p>
+                            <div class="card-tags">
+                                ${project.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="button-container">
+                                <button class="btn-demo" onclick="event.stopPropagation(); openDemo('${project.demoUrl}')">🚀 Demo</button>
+                                <button class="btn-processo" onclick="event.stopPropagation(); openProcesso(${project.id})">📋 Processo</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                projectsTrack.appendChild(slide);
+            });
+
+            // Loja Carousel
+            const shopTrack = document.getElementById('shop-track');
+            if (shopTrack) {
+                shopData.forEach(product => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.innerHTML = `
+                        <div class="carousel-card" onclick="openProductModal(${product.id})">
+                            <i class="fa-solid ${product.icon} card-icon"></i>
+                            <span class="card-category" style="font-size: 0.7rem; color: var(--neon-blue);">${product.category}</span>
+                            <h3 class="card-title">${product.title}</h3>
+                            <p class="card-description">${product.description}</p>
+                            <div class="card-footer">
+                                <span class="card-price">${product.price}</span>
+                                <span class="card-link">Ver produto →</span>
+                            </div>
+                        </div>
+                    `;
+                    shopTrack.appendChild(slide);
+                });
+            }
+
+            // Blog Carousel
+            const blogTrack = document.getElementById('blog-track');
+            if (blogTrack) {
+                blogData.forEach(article => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.innerHTML = `
+                        <div class="carousel-card" onclick="openArticleModal(${article.id})">
+                            <span class="card-category" style="font-size: 0.7rem; color: var(--neon-blue);">${article.category}</span>
+                            <h3 class="card-title">${article.title}</h3>
+                            <p class="card-description">${article.excerpt.substring(0, 80)}...</p>
+                            <div class="card-footer">
+                                <span class="card-price">${article.readTime} • ${article.date}</span>
+                                <span class="card-link">Ler artigo →</span>
+                            </div>
+                        </div>
+                    `;
+                    blogTrack.appendChild(slide);
+                });
+            }
+
+            // Setup carousel controls
+            setupCarousel('services', document.getElementById('services-track'));
+            setupCarousel('portfolio', document.getElementById('portfolio-track'));
+            setupProjectCarousel('projects', document.getElementById('projects-track'));
+            setupCarousel('shop', document.getElementById('shop-track'));
+            setupCarousel('blog', document.getElementById('blog-track'));
+
+            // Setup dos filtros de projetos
+            setupProjectFilters();
+        }
+
+        // Configuração para carrossel de projetos (com filtros)
+        function setupProjectCarousel(name, track) {
+            if (!track) return;
+
+            const prevBtn = document.getElementById(`${name}-prev`);
+            const nextBtn = document.getElementById(`${name}-next`);
+            const indicatorsContainer = document.getElementById(`${name}-indicators`);
+            const progressFill = document.getElementById(`${name}-progress`);
+
+            if (!prevBtn || !nextBtn || !indicatorsContainer) return;
+
+            function getVisibleSlides() {
+                return Array.from(track.children).filter(slide =>
+                    slide.style.display !== 'none' && slide.classList.contains('carousel-slide')
+                );
+            }
+
+            function getSlideWidth() {
+                const visibleSlides = getVisibleSlides();
+                if (visibleSlides.length === 0) return 350;
+                return visibleSlides[0]?.offsetWidth + 24 || 350;
+            }
+
+            function updateIndicators() {
+                const visibleSlides = getVisibleSlides();
+                const total = visibleSlides.length;
+
+                if (total === 0) {
+                    indicatorsContainer.innerHTML = '';
+                    if (progressFill) progressFill.style.width = '0%';
+                    return;
+                }
+
+                if (indicatorsContainer.children.length !== total) {
+                    indicatorsContainer.innerHTML = '';
+                    for (let i = 0; i < total; i++) {
+                        const indicator = document.createElement('div');
+                        indicator.className = `carousel-indicator ${i === 0 ? 'active' : ''}`;
+                        indicator.addEventListener('click', () => {
+                            const slideWidth = getSlideWidth();
+                            track.scrollTo({ left: i * slideWidth, behavior: 'smooth' });
+                        });
+                        indicatorsContainer.appendChild(indicator);
+                    }
+                }
+
+                const scrollLeft = track.scrollLeft;
+                const slideWidth = getSlideWidth();
+                const index = Math.round(scrollLeft / slideWidth);
+
+                Array.from(indicatorsContainer.children).forEach((ind, i) => {
+                    ind.classList.toggle('active', i === index);
+                });
+
+                if (progressFill && total > 0) {
+                    const progress = (index / (total - 1)) * 100;
+                    progressFill.style.width = `${progress}%`;
+                }
+
+                if (prevBtn) {
+                    prevBtn.classList.toggle('disabled', scrollLeft <= 10);
+                }
+                if (nextBtn) {
+                    nextBtn.classList.toggle('disabled', scrollLeft >= track.scrollWidth - track.clientWidth - 10);
+                }
+            }
+
+            track.addEventListener('scroll', updateIndicators);
+
+            prevBtn.addEventListener('click', () => {
+                const slideWidth = getSlideWidth();
+                track.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                const slideWidth = getSlideWidth();
+                track.scrollBy({ left: slideWidth, behavior: 'smooth' });
+            });
+
+            const observer = new MutationObserver(() => {
+                setTimeout(() => {
+                    updateIndicators();
+                }, 50);
+            });
+
+            observer.observe(track, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+
+            setTimeout(() => {
+                updateIndicators();
+            }, 100);
+        }
+
+        // Configuração padrão para carrosséis
+        function setupCarousel(name, track) {
+            if (!track) return;
+
+            const prevBtn = document.getElementById(`${name}-prev`);
+            const nextBtn = document.getElementById(`${name}-next`);
+            const indicatorsContainer = document.getElementById(`${name}-indicators`);
+
+            if (!prevBtn || !nextBtn || !indicatorsContainer) return;
+
+            const slides = track.querySelectorAll('.carousel-slide');
+            const slideWidth = slides[0]?.offsetWidth + 24 || 350;
+
+            slides.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = `carousel-indicator ${index === 0 ? 'active' : ''}`;
+                indicator.addEventListener('click', () => {
+                    track.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+                });
+                indicatorsContainer.appendChild(indicator);
+            });
+
+            track.addEventListener('scroll', () => {
+                const scrollLeft = track.scrollLeft;
+                const index = Math.round(scrollLeft / slideWidth);
+
+                document.querySelectorAll(`#${name}-indicators .carousel-indicator`).forEach((ind, i) => {
+                    ind.classList.toggle('active', i === index);
+                });
+
+                if (prevBtn) {
+                    prevBtn.classList.toggle('disabled', scrollLeft <= 10);
+                }
+                if (nextBtn) {
+                    nextBtn.classList.toggle('disabled', scrollLeft >= track.scrollWidth - track.clientWidth - 10);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                track.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                track.scrollBy({ left: slideWidth, behavior: 'smooth' });
+            });
+        }
+
+        // Configuração dos filtros de projetos
+        function setupProjectFilters() {
+            const filterBtns = document.querySelectorAll('#project-filters .filter-btn');
+            const track = document.getElementById('projects-track');
+
+            if (!filterBtns.length || !track) return;
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filter = this.dataset.filter;
+                    const slides = track.querySelectorAll('.carousel-slide');
+
+                    slides.forEach(slide => {
+                        if (filter === 'all') {
+                            slide.style.display = '';
+                        } else {
+                            const status = slide.getAttribute('data-status');
+                            slide.style.display = status === filter ? '' : 'none';
+                        }
+                    });
+
+                    track.scrollTo({ left: 0, behavior: 'smooth' });
+
+                    setTimeout(() => {
+                        track.dispatchEvent(new Event('scroll'));
+                    }, 100);
+                });
+            });
+        }
+
+        // ===== DRAG TO SCROLL =====
+        function initDragScroll() {
+            document.querySelectorAll('.carousel-track').forEach(track => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                track.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    track.classList.add('active');
+                    startX = e.pageX - track.offsetLeft;
+                    scrollLeft = track.scrollLeft;
+                });
+
+                track.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    track.classList.remove('active');
+                });
+
+                track.addEventListener('mouseup', () => {
+                    isDown = false;
+                    track.classList.remove('active');
+                });
+
+                track.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - track.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    track.scrollLeft = scrollLeft - walk;
+                });
+            });
+        }
+
+        // ===== FUNÇÕES DE MODAL =====
+        window.openServiceModal = function (title, service) {
+            const modal = document.getElementById('serviceModal');
+            const body = document.getElementById('serviceModalBody');
+
+            if (!modal || !body) return;
+
+            body.innerHTML = `
+                <div class="service-icon-large">
+                    <i class="fa-solid ${service.icon}"></i>
+                </div>
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">${service.title}</h3>
+                <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">${service.longDescription || service.description}</p>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-weight: 700; margin-bottom: 1rem;">Tecnologias e Ferramentas</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center;">
+                        ${service.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="service-price-card">
+                    <div class="service-price">${service.price}</div>
+                    <p style="color: var(--color-text-secondary); margin-top: 0.5rem;">Investimento inicial</p>
+                </div>
+
+                <div style="margin-bottom: 2rem; text-align: left;">
+                    <h4 style="font-weight: 700; margin-bottom: 1rem;">O que está incluso:</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        ${service.features ? service.features.map(f => `
+                            <li style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-check" style="color: var(--color-accent);"></i>
+                                <span>${f}</span>
+                            </li>
+                        `).join('') : ''}
+                    </ul>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="closeServiceModal()" class="btn btn-outline" style="flex: 1;">Fechar</button>
+                    <button onclick="openDemo('https://wa.me/5511914809693?text=Olá!%20Tenho%20interesse%20no%20serviço%20de%20${encodeURIComponent(service.title)}')" class="btn" style="flex: 1;">Solicitar Orçamento</button>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeServiceModal = function () {
+            const modal = document.getElementById('serviceModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.openProcesso = function (projectId) {
+            const modal = document.getElementById('processoModal');
+            if (!modal) return;
+
+            const data = processosData[projectId] || {
+                title: projectsData.find(p => p.id === projectId)?.title || 'Projeto',
+                timeline: [],
+                files: []
+            };
+
+            const timeline = document.getElementById('timeline');
+            let timelineHTML = '';
+
+            if (data.timeline && data.timeline.length > 0) {
+                data.timeline.forEach(item => {
+                    timelineHTML += `
+                        <div class="timeline-item">
+                            <div class="timeline-date">📅 ${item.date}</div>
+                            <div class="timeline-title">${item.title}</div>
+                            <div class="timeline-description">${item.description}</div>
+                            <div class="timeline-tags">
+                                ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                timelineHTML = '<p style="color: var(--color-text-secondary); text-align: center;">Em breve...</p>';
+            }
+            timeline.innerHTML = timelineHTML;
+
+            const filesGrid = document.getElementById('filesGrid');
+            let filesHTML = '';
+
+            if (data.files && data.files.length > 0) {
+                data.files.forEach(file => {
+                    filesHTML += `
+                        <div class="file-item" onclick="downloadFile('${file.name}')">
+                            <div class="file-icon">${file.icon}</div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${file.size}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                filesHTML = '<p style="color: var(--color-text-secondary); text-align: center;">Nenhum arquivo disponível</p>';
+            }
+            filesGrid.innerHTML = filesHTML;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeProcessoModal = function () {
+            const modal = document.getElementById('processoModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.openProductModal = function (productId) {
+            const modal = document.getElementById('productModal');
+            const body = document.getElementById('productModalBody');
+
+            if (!modal || !body) return;
+
+            const product = shopData.find(p => p.id === productId);
+            if (!product) return;
+
+            body.innerHTML = `
+                <div class="product-detail-icon">
+                    <i class="fa-solid ${product.icon}"></i>
+                </div>
+                <div class="product-detail-category">${product.category}</div>
+                <div class="product-detail-title">${product.title}</div>
+                <div class="product-detail-price">${product.price}</div>
+                <p class="product-detail-description">${product.longDescription || product.description}</p>
+                
+                <div class="product-features">
+                    <h4>✨ Recursos inclusos:</h4>
+                    <ul>
+                        ${product.features.map(f => `
+                            <li>
+                                <i class="fa-solid fa-check-circle"></i>
+                                <span>${f}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-weight: 700; margin-bottom: 1rem;">Especificações:</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${product.specs ? product.specs.map(s => `
+                            <span class="tag">${s}</span>
+                        `).join('') : ''}
+                    </div>
+                </div>
+
+                <div class="product-actions">
+                    <button onclick="closeProductModal()" class="btn btn-outline" style="flex: 1;">Fechar</button>
+                    <button onclick="openDemo('${product.demoUrl}')" class="btn" style="flex: 1;">Ver Demo</button>
+                    <button onclick="openDemo('https://wa.me/5511914809693?text=Olá!%20Quero%20comprar%20${encodeURIComponent(product.title)}')" class="btn" style="flex: 1;">Comprar</button>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeProductModal = function () {
+            const modal = document.getElementById('productModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.openArticleModal = function (articleId) {
+            const modal = document.getElementById('articleModal');
+            const body = document.getElementById('articleModalBody');
+
+            if (!modal || !body) return;
+
+            const article = blogData.find(a => a.id === articleId);
+            if (!article) return;
+
+            body.innerHTML = `
+                <div class="article-detail-category">${article.category}</div>
+                <div class="article-detail-title">${article.title}</div>
+                
+                <div class="article-meta">
+                    <span><i class="fa-regular fa-calendar"></i> ${article.date}</span>
+                    <span><i class="fa-regular fa-clock"></i> ${article.readTime} de leitura</span>
+                </div>
+                
+                <div class="article-detail-excerpt">
+                    "${article.excerpt}"
+                </div>
+                
+                <div class="article-detail-content">
+                    ${article.content}
+                </div>
+                
+                <div class="article-tags">
+                    ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                
+                <div class="article-actions">
+                    <button onclick="closeArticleModal()" class="btn btn-outline" style="flex: 1;">Fechar</button>
+                    <a href="${article.url}" target="_blank" class="btn" style="flex: 1; text-decoration: none;">Ler artigo completo</a>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeArticleModal = function () {
+            const modal = document.getElementById('articleModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.openDefaultModal = function () {
+            const modal = document.getElementById('defaultModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        window.closeDefaultModal = function () {
+            const modal = document.getElementById('defaultModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.openDemo = function (url) {
+            window.open(url, '_blank');
+        };
+
+        window.downloadFile = function (filename) {
+            alert(`Download de ${filename} iniciado! (Simulação)`);
+        };
+
+        // ===== SCROLL ANIMATIONS =====
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+        }
+
+        // ===== PARTÍCULAS CANVAS =====
+        function initParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 60;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * 3 + 1,
+                    color: `rgba(61, 133, 198, ${Math.random() * 0.4})`
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // ===== THREE.JS =====
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            if (!container || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 35;
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const colors = [0x3d85c6, 0x9b59b6, 0x00f3ff];
+            colors.forEach((color, i) => {
+                const light = new THREE.PointLight(color, 1.2, 60);
+                light.position.set(
+                    Math.sin(i * Math.PI * 2 / 3) * 18,
+                    Math.cos(i * Math.PI * 2 / 3) * 18,
+                    18
+                );
+                scene.add(light);
+            });
+
+            const particleCount = 800;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors_array = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const r = 15 + Math.random() * 15;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+
+                positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                positions[i * 3 + 2] = r * Math.cos(phi);
+
+                const color = new THREE.Color(colors[Math.floor(Math.random() * colors.length)]);
+                colors_array[i * 3] = color.r;
+                colors_array[i * 3 + 1] = color.g;
+                colors_array[i * 3 + 2] = color.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors_array, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.12,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            const shapes = [];
+            const geometries = [
+                new THREE.IcosahedronGeometry(1.0, 0),
+                new THREE.TorusKnotGeometry(0.7, 0.2, 64, 8),
+                new THREE.OctahedronGeometry(0.9),
+                new THREE.DodecahedronGeometry(0.8)
+            ];
+
+            geometries.forEach((geom, i) => {
+                const material = new THREE.MeshStandardMaterial({
+                    color: colors[i % colors.length],
+                    emissive: colors[i % colors.length],
+                    emissiveIntensity: 0.2,
+                    roughness: 0.3,
+                    metalness: 0.4,
+                    transparent: true,
+                    opacity: 0.5,
+                    wireframe: i % 2 === 0
+                });
+
+                const mesh = new THREE.Mesh(geom, material);
+
+                const angle = (i / geometries.length) * Math.PI * 2;
+                mesh.position.set(Math.cos(angle) * 12, Math.sin(angle) * 12, (i - geometries.length / 2) * 2);
+
+                mesh.userData = {
+                    speed: 0.001 + Math.random() * 0.002,
+                    rotationSpeed: 0.005 + Math.random() * 0.005,
+                    initialPosition: mesh.position.clone()
+                };
+
+                scene.add(mesh);
+                shapes.push(mesh);
+            });
+
+            let time = 0;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                time += 0.002;
+
+                particles.rotation.x += 0.0003;
+                particles.rotation.y += 0.0005;
+
+                shapes.forEach((shape, i) => {
+                    shape.rotation.x += shape.userData.rotationSpeed;
+                    shape.rotation.y += shape.userData.rotationSpeed * 1.3;
+                    shape.position.x = shape.userData.initialPosition.x + Math.sin(time * 2 + i) * 1.5;
+                    shape.position.y = shape.userData.initialPosition.y + Math.cos(time * 1.8 + i) * 1.5;
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // ===== GSAP ANIMATIONS =====
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from('.split-half', {
+                opacity: 0,
+                y: 50,
+                duration: 1.2,
+                stagger: 0.4,
+                delay: 1.5,
+                ease: 'power3.out',
+                onComplete: () => {
+                    document.querySelectorAll('.split-half').forEach(half => half.classList.add('active'));
+                }
+            });
+        }
+
+        // ===== LANG CHANGE =====
+        document.getElementById('lang-change')?.addEventListener('click', () => {
+            const langs = ['pt', 'en', 'es'];
+            const next = langs[(langs.indexOf(currentLang) + 1) % langs.length];
+            currentLang = next;
+            localStorage.setItem('language', next);
+            translatePage(next);
+        });
+
+        document.getElementById('mobile-lang-change')?.addEventListener('click', () => {
+            const langs = ['pt', 'en', 'es'];
+            const next = langs[(langs.indexOf(currentLang) + 1) % langs.length];
+            currentLang = next;
+            localStorage.setItem('language', next);
+            translatePage(next);
+        });
+
+        // ===== FECHA MODAIS COM ESC =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeServiceModal();
+                closeProcessoModal();
+                closeProductModal();
+                closeArticleModal();
+                closeDefaultModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

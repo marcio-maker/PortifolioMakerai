@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Aplicada a Negócios Digitais | Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fa; color: #1e293b; line-height: 1.6; padding: 2rem 1rem; }
+        .article-container { max-width: 800px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); overflow: hidden; }
+        .article-header { padding: 2rem 2rem 1rem 2rem; }
+        .category { display: inline-block; background: #dbeafe; color: #1d4ed8; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.35rem 1rem; border-radius: 20px; margin-bottom: 1rem; }
+        h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; color: #0f172a; }
+        .meta { display: flex; align-items: center; gap: 1rem; color: #64748b; font-size: 0.9rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem; }
+        .meta i { margin-right: 0.3rem; color: #2563eb; }
+        .featured-image { width: 100%; height: 300px; background: linear-gradient(135deg, #2563eb, #7c3aed); position: relative; overflow: hidden; }
+        .featured-image::after { content: '🤖 IA & Negócios'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 2rem; font-weight: 800; opacity: 0.2; white-space: nowrap; }
+        .article-content { padding: 2rem; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 1.8rem 0 1rem; color: #0f172a; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.8rem; color: #1e293b; }
+        p { margin-bottom: 1.2rem; color: #334155; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        blockquote { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 1.2rem 1.5rem; border-radius: 8px; font-style: italic; margin: 1.5rem 0; color: #1e293b; }
+        .highlight { background: #dbeafe; padding: 0.2rem 0.4rem; border-radius: 6px; font-weight: 500; color: #1e40af; }
+        .stats-grid { display: flex; gap: 1rem; margin: 2rem 0; flex-wrap: wrap; }
+        .stat-card { flex: 1; background: #f8fafc; border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid #e2e8f0; }
+        .stat-number { font-size: 2rem; font-weight: 800; color: #2563eb; }
+        .article-footer { padding: 1.5rem 2rem 2rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .author-box { display: flex; align-items: center; gap: 1rem; }
+        .author-avatar { width: 48px; height: 48px; background: linear-gradient(135deg, #2563eb, #7c3aed); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.2rem; }
+        .author-info strong { display: block; font-size: 1rem; color: #0f172a; }
+        .author-info span { font-size: 0.85rem; color: #64748b; }
+        .share-buttons { display: flex; gap: 0.8rem; }
+        .share-buttons a { width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #334155; transition: 0.2s; }
+        .share-buttons a:hover { background: #2563eb; color: white; }
+        .back-link { text-align: center; margin-top: 2rem; }
+        .back-link a { color: #2563eb; text-decoration: none; font-weight: 500; }
+        @media (max-width: 600px) { h1 { font-size: 1.8rem; } .article-header { padding: 1.5rem; } .article-content { padding: 1.5rem; } .stats-grid { flex-direction: column; } .article-footer { flex-direction: column; gap: 1rem; align-items: start; } }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <div class="article-header">
+            <span class="category"><i class="fa-solid fa-brain" style="margin-right: 0.4rem;"></i> IA & Futuro</span>
+            <h1>IA Aplicada a Negócios Digitais: Como usar inteligência artificial para gerar valor real</h1>
+            <div class="meta">
+                <span><i class="fa-regular fa-calendar"></i> 5 março 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 6 min leitura</span>
+                <span><i class="fa-regular fa-user"></i> Marcio Maker</span>
+            </div>
+        </div>
+        
+        <div class="featured-image"></div>
+
+        <div class="article-content">
+            <p>A inteligência artificial deixou de ser tendência e se tornou <span class="highlight">vantagem competitiva</span>. Mas como aplicá-la de forma prática no seu negócio digital sem se perder em modismo?</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">73%</div>
+                    <div>das empresas já usam IA em pelo menos uma área (Fonte: McKinsey)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.5x</div>
+                    <div>mais receita para negócios que adotam IA personalizada</div>
+                </div>
+            </div>
+
+            <h2>1. Onde a IA realmente entrega valor hoje</h2>
+            <p>Os casos de uso mais maduros envolvem <strong>automação de atendimento, personalização em escala e análise preditiva</strong>. Não tente abraçar o mundo; comece por um problema claro.</p>
+
+            <h3>Exemplos práticos:</h3>
+            <ul>
+                <li><strong>E-commerce:</strong> recomendações de produtos baseadas em comportamento</li>
+                <li><strong>Educação:</strong> tutores adaptativos que ajustam o conteúdo ao aluno</li>
+                <li><strong>Saúde:</strong> triagem de sintomas via chatbot</li>
+                <li><strong>Marketing:</strong> geração de criativos e copywriting com IA generativa</li>
+            </ul>
+
+            <blockquote>
+                “O maior erro é pensar na IA como um fim, e não como um meio para resolver problemas reais de usuários.”
+            </blockquote>
+
+            <h2>2. Como começar sem um time de data science</h2>
+            <p>APIs de grandes provedores (OpenAI, Anthropic, Google) tornaram a IA acessível. Você pode integrar funcionalidades inteligentes com poucas linhas de código.</p>
+
+            <div class="code-block" style="background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 12px; font-family: monospace; margin: 1.5rem 0;">
+// Exemplo com API da OpenAI (Node.js)
+import OpenAI from 'openai';
+const openai = new OpenAI();
+
+const response = await openai.chat.completions.create({
+  model: 'gpt-4',
+  messages: [{ role: 'user', content: 'Gere 3 ideias de posts para Instagram sobre UX' }]
+});
+            </div>
+
+            <h2>3. Ética e viés: não ignore</h2>
+            <p>Modelos de IA carregam vieses dos dados de treinamento. É essencial ter curadoria humana e pensar na <span class="highlight">transparência</span> com o usuário.</p>
+
+            <p>A IA não substitui o profissional, mas potencializa seu trabalho. Quem souber usá-la como ferramenta sairá na frente.</p>
+        </div>
+
+        <div class="article-footer">
+            <div class="author-box">
+                <div class="author-avatar">MM</div>
+                <div class="author-info">
+                    <strong>Marcio Maker</strong>
+                    <span>Designer & Desenvolvedor</span>
+                </div>
+            </div>
+            <div class="share-buttons">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#"><i class="fa-regular fa-bookmark"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="back-link">
+        <a href="#">← Voltar para o blog</a>
+    </div>
+</body>
+</html>
