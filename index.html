@@ -271,13 +271,23 @@
         }
 
         @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         @keyframes fadeIn {
-            to { opacity: 1; }
+            to {
+                opacity: 1;
+            }
         }
 
         /* ===== SELECTOR DE IDIOMA ===== */
@@ -338,6 +348,7 @@
                 opacity: 0;
                 transform: scale(0.9);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -813,6 +824,7 @@
                 opacity: 1;
                 transform: translateX(-50%) translateY(0);
             }
+
             100% {
                 opacity: 0;
                 transform: translateX(-50%) translateY(15px);
@@ -1904,6 +1916,269 @@
                 flex: 0 0 380px;
             }
         }
+
+        /* ===== MEDIA QUERY SOMENTE PARA MOBILE PEQUENO (até 480px) ===== */
+        @media screen and (max-width: 480px) {
+            /* Ajustes mínimos necessários para mobile */
+            
+            /* Container com padding reduzido */
+            .container {
+                padding: 0 0.75rem;
+            }
+            
+            /* Header mais compacto */
+            .header {
+                top: 0.5rem;
+            }
+            
+            .header-inner {
+                padding: 0.4rem 1rem;
+            }
+            
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
+            .logo-text {
+                font-size: 1rem;
+            }
+            
+            /* Hero ajustado */
+            .split-half {
+                min-height: 50vh;
+            }
+            
+            .split-title {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+            
+            .split-content {
+                padding: 1rem;
+            }
+            
+            /* Seções com padding reduzido */
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .section::after {
+                width: 100px;
+            }
+            
+            .section-title {
+                font-size: clamp(1.8rem, 7vw, 2.2rem);
+            }
+            
+            .section-subtitle {
+                font-size: 0.95rem;
+                padding: 0 1rem;
+            }
+            
+            /* Sobre */
+            .about-image {
+                order: 0;
+            }
+            
+            .image-container {
+                width: 70%;
+                max-width: 250px;
+            }
+            
+            .about-content {
+                padding: 1.5rem;
+            }
+            
+            .about-text {
+                font-size: 0.95rem;
+            }
+            
+            .skill-tags span {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
+            
+            /* Carrosséis */
+            .carousel-slide {
+                flex: 0 0 240px;
+            }
+            
+            .card-title {
+                font-size: 1.2rem;
+            }
+            
+            .project-card-image {
+                height: 120px;
+            }
+            
+            /* Botões nos cards */
+            .button-container {
+                flex-direction: column;
+                gap: 6px;
+            }
+            
+            .btn-demo,
+            .btn-processo {
+                width: 100%;
+            }
+            
+            /* Filtros */
+            .filters {
+                gap: 6px;
+            }
+            
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+            
+            /* Controles do carrossel */
+            .carousel-controls {
+                margin: 0.5rem 1rem 0;
+            }
+            
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .carousel-indicator {
+                width: 20px;
+                height: 3px;
+            }
+            
+            .carousel-indicator.active {
+                width: 40px;
+            }
+            
+            /* Contato */
+            .contact-link {
+                padding: 1rem;
+            }
+            
+            .link-label {
+                font-size: 0.8rem;
+            }
+            
+            .link-value {
+                font-size: 0.9rem;
+            }
+            
+            /* Footer */
+            .footer {
+                padding: 2rem 0;
+            }
+            
+            .footer-text {
+                font-size: 0.8rem;
+            }
+            
+            .social-links a {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            /* Botões flutuantes */
+            .whatsapp-float {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+                right: 1rem;
+                bottom: 5rem;
+            }
+            
+            #back-to-top {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+                right: 1.2rem;
+                bottom: 1rem;
+            }
+            
+            /* Modais */
+            .modal-content {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+            }
+            
+            .modal-close {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
+            .product-detail-title,
+            .article-detail-title {
+                font-size: 1.4rem;
+            }
+            
+            .product-detail-price {
+                font-size: 1.5rem;
+            }
+            
+            .product-actions,
+            .article-actions {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            /* Timeline */
+            .timeline::before {
+                left: 15px;
+            }
+            
+            .timeline-item {
+                padding-left: 40px;
+            }
+            
+            .timeline-item::before {
+                left: 8px;
+                width: 14px;
+                height: 14px;
+            }
+            
+            .files-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== PARA TELAS MUITO PEQUENAS (até 360px) ===== */
+        @media screen and (max-width: 360px) {
+            .carousel-slide {
+                flex: 0 0 200px;
+            }
+            
+            .filter-btn {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+            
+            .logo-text {
+                font-size: 0.9rem;
+            }
+            
+            .menu-toggle span {
+                width: 24px;
+            }
+            
+            .files-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .split-half {
+                min-height: 40vh;
+            }
+        }
     </style>
 </head>
 
@@ -2464,13 +2739,13 @@
             }
         ];
 
-        // ===== 20 PROJETOS REAIS DO SLIDES.HTML =====
+        // ===== 20 PROJETOS REAIS REVISADOS E TESTADOS =====
         const projectsData = [
             {
                 id: 1,
                 title: 'Flower Shop',
                 description: 'E-commerce de flores com foco em UI moderna e experiência fluida.',
-                image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80',
                 tags: ['E-commerce', 'UI/UX', 'Responsivo'],
                 demoUrl: 'https://marcio-maker.github.io/Flower-Shop/',
                 status: 'concluido',
@@ -2480,7 +2755,7 @@
                 id: 2,
                 title: 'Scanner 3D',
                 description: 'Experiência interativa com visualização e manipulação 3D na web.',
-                image: 'https://images.unsplash.com/photo-1633412802994-5c058f151b66?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&w=800&q=80',
                 tags: ['3D', 'WebGL', 'Interatividade'],
                 demoUrl: 'https://marcio-maker.github.io/Scaner3D/',
                 status: 'concluido',
@@ -2490,7 +2765,7 @@
                 id: 3,
                 title: 'Wayne Enterprises',
                 description: 'Landing page corporativa com design moderno e responsivo.',
-                image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
                 tags: ['Landing Page', 'Corporativo', 'Responsivo'],
                 demoUrl: 'https://marcio-maker.github.io/WAYNE_ENTERPRISES.01/',
                 status: 'concluido',
@@ -2500,7 +2775,7 @@
                 id: 4,
                 title: 'Flow',
                 description: 'Experimento visual interativo com animações fluidas.',
-                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80',
                 tags: ['Animação', 'UI', 'Experimental'],
                 demoUrl: 'https://marcio-maker.github.io/FLOW/',
                 status: 'concluido',
@@ -2510,7 +2785,7 @@
                 id: 5,
                 title: 'Maker AI Studio',
                 description: 'Ferramenta de criação com inteligência artificial aplicada.',
-                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80',
                 tags: ['IA', 'Plataforma', 'Web App'],
                 demoUrl: 'https://maker-ai-studio.vercel.app/',
                 status: 'processo',
@@ -2520,7 +2795,7 @@
                 id: 6,
                 title: 'Maker AI Studio v2',
                 description: 'Nova versão da ferramenta Maker AI com recursos avançados.',
-                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80',
                 tags: ['IA', 'V2', 'Web App'],
                 demoUrl: 'https://maker-ai-studio-tbx2.vercel.app/',
                 status: 'processo',
@@ -2530,7 +2805,7 @@
                 id: 7,
                 title: 'Landing Page',
                 description: 'Landing page responsiva de alta conversão.',
-                image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
                 tags: ['Marketing', 'Conversão', 'Responsivo'],
                 demoUrl: 'https://marcio-maker.github.io/LandingPage/',
                 status: 'concluido',
@@ -2540,7 +2815,7 @@
                 id: 8,
                 title: 'Agência Maker IA',
                 description: 'Site institucional para agência de IA e inovação.',
-                image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
                 tags: ['Institucional', 'IA', 'Moderno'],
                 demoUrl: 'https://agencia-maker-ia.vercel.app/',
                 status: 'concluido',
@@ -2550,7 +2825,7 @@
                 id: 9,
                 title: 'PWA Hair Style Pro',
                 description: 'Simulador de cortes de cabelo com tecnologia PWA.',
-                image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80',
                 tags: ['PWA', 'Beleza', 'Simulador'],
                 demoUrl: 'https://marcio-maker.github.io/PWA-Hair-Style-Pro/',
                 status: 'processo',
@@ -2560,7 +2835,7 @@
                 id: 10,
                 title: 'Curso AHA',
                 description: 'Plataforma de curso online com conteúdo interativo.',
-                image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=800&q=80',
                 tags: ['Educação', 'EAD', 'Plataforma'],
                 demoUrl: 'https://appcursoaha.netlify.app/',
                 status: 'concluido',
@@ -2570,7 +2845,7 @@
                 id: 11,
                 title: 'SuperFlix',
                 description: 'Interface de streaming com navegação dinâmica e visual moderno.',
-                image: 'https://images.unsplash.com/photo-1585951237318-9ea5e175b891?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=800&q=80',
                 tags: ['Streaming', 'UI', 'Frontend'],
                 demoUrl: 'https://marcio-maker.github.io/SuperFlix/',
                 status: 'concluido',
@@ -2580,7 +2855,7 @@
                 id: 12,
                 title: 'ERP Salão',
                 description: 'Sistema completo de gestão para salão de beleza.',
-                image: 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=800&q=80',
                 tags: ['ERP', 'Gestão', 'Sistema Web'],
                 demoUrl: 'https://erp-salao-git-main-marcio-makers-projects.vercel.app/',
                 status: 'processo',
@@ -2590,7 +2865,7 @@
                 id: 13,
                 title: 'Web3D Experience',
                 description: 'Exploração de ambientes tridimensionais e interação em tempo real.',
-                image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?auto=format&fit=crop&w=800&q=80',
                 tags: ['Three.js', '3D', 'Experiência'],
                 demoUrl: 'https://marcio-maker.github.io/Web3D/',
                 status: 'concluido',
@@ -2600,7 +2875,7 @@
                 id: 14,
                 title: 'UP App',
                 description: 'Aplicação web interativa com design moderno.',
-                image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
                 tags: ['Web App', 'UI', 'Interativo'],
                 demoUrl: 'https://up-app-seven.vercel.app/',
                 status: 'concluido',
@@ -2610,7 +2885,7 @@
                 id: 15,
                 title: 'Prototype 01',
                 description: 'Protótipo experimental de interface inovadora.',
-                image: 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=800&q=80',
                 tags: ['Protótipo', 'Experimental', 'UI'],
                 demoUrl: 'https://marcio-maker.github.io/Prototipo_01/',
                 status: 'concluido',
@@ -2620,7 +2895,7 @@
                 id: 16,
                 title: 'Web Parallax',
                 description: 'Site com efeitos parallax e animações suaves.',
-                image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1451187534959-425632000201?auto=format&fit=crop&w=800&q=80',
                 tags: ['Parallax', 'Animações', 'Scroll'],
                 demoUrl: 'https://marcio-maker.github.io/WebParallax/',
                 status: 'concluido',
@@ -2630,7 +2905,8 @@
                 id: 17,
                 title: 'Diagnóstico Facial',
                 description: 'Protótipo digital para análise facial aplicada à área da beleza.',
-                image: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1000&q=80',
+                // Imagem específica de Scan Facial em tons de azul/tecnologia
+                image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
                 tags: ['IA', 'Beleza Tech', 'Análise'],
                 demoUrl: 'https://marcio-maker.github.io/DIAGNOSTICOFACIAL/',
                 status: 'concluido',
@@ -2640,7 +2916,7 @@
                 id: 18,
                 title: 'Store App',
                 description: 'Aplicação de loja virtual com carrinho e checkout.',
-                image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80',
                 tags: ['E-commerce', 'Loja', 'Carrinho'],
                 demoUrl: 'https://marcio-maker.github.io/StoreApp/',
                 status: 'concluido',
@@ -2650,7 +2926,7 @@
                 id: 19,
                 title: 'Serraventura',
                 description: 'Site turístico experimental com design imersivo.',
-                image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
                 tags: ['Turismo', 'Experimental', 'Imersivo'],
                 demoUrl: 'https://marcio-maker.github.io/Serraventura/',
                 status: 'concluido',
@@ -2660,7 +2936,7 @@
                 id: 20,
                 title: 'Flow UI',
                 description: 'Experimento visual de interface com animações.',
-                image: 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1000&q=80',
+                image: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=800&q=80',
                 tags: ['UI', 'Animações', 'Experimental'],
                 demoUrl: 'https://marcio-maker.github.io/FLOW/',
                 status: 'concluido',
@@ -2954,62 +3230,62 @@
         // ===== AUTOPLAY DOS CARROSSÉIS =====
         function initCarouselAutoplay() {
             const carousels = [
-                { 
-                    name: 'services', 
-                    track: document.getElementById('services-track'), 
+                {
+                    name: 'services',
+                    track: document.getElementById('services-track'),
                     interval: 4000,
                     direction: 1
                 },
-                { 
-                    name: 'portfolio', 
-                    track: document.getElementById('portfolio-track'), 
+                {
+                    name: 'portfolio',
+                    track: document.getElementById('portfolio-track'),
                     interval: 4500,
                     direction: -1
                 },
-                { 
-                    name: 'projects', 
-                    track: document.getElementById('projects-track'), 
+                {
+                    name: 'projects',
+                    track: document.getElementById('projects-track'),
                     interval: 5000,
                     direction: 1
                 },
-                { 
-                    name: 'shop', 
-                    track: document.getElementById('shop-track'), 
+                {
+                    name: 'shop',
+                    track: document.getElementById('shop-track'),
                     interval: 4200,
                     direction: -1
                 },
-                { 
-                    name: 'blog', 
-                    track: document.getElementById('blog-track'), 
+                {
+                    name: 'blog',
+                    track: document.getElementById('blog-track'),
                     interval: 4800,
                     direction: 1
                 }
             ];
-            
+
             carousels.forEach(carousel => {
                 if (!carousel.track) return;
-                
+
                 let autoplayInterval;
                 let isPaused = false;
                 let currentDirection = carousel.direction;
-                
+
                 function getSlideWidth() {
                     const firstSlide = carousel.track.querySelector('.carousel-slide:not([style*="display: none"])');
                     if (!firstSlide) return 350;
-                    
+
                     const style = window.getComputedStyle(firstSlide);
                     const marginRight = parseFloat(style.marginRight) || 0;
                     const marginLeft = parseFloat(style.marginLeft) || 0;
                     return firstSlide.offsetWidth + marginRight + marginLeft + 24;
                 }
-                
+
                 function moveNext() {
                     if (isPaused) return;
-                    
+
                     const slideWidth = getSlideWidth();
                     const maxScroll = carousel.track.scrollWidth - carousel.track.clientWidth;
                     const nextPosition = carousel.track.scrollLeft + slideWidth;
-                    
+
                     if (nextPosition >= maxScroll - 10) {
                         carousel.track.scrollTo({ left: 0, behavior: 'smooth' });
                         currentDirection = -1;
@@ -3017,63 +3293,63 @@
                         carousel.track.scrollBy({ left: slideWidth, behavior: 'smooth' });
                     }
                 }
-                
+
                 function movePrev() {
                     if (isPaused) return;
-                    
+
                     const slideWidth = getSlideWidth();
                     const prevPosition = carousel.track.scrollLeft - slideWidth;
-                    
+
                     if (prevPosition <= 10) {
-                        carousel.track.scrollTo({ 
-                            left: carousel.track.scrollWidth - carousel.track.clientWidth, 
-                            behavior: 'smooth' 
+                        carousel.track.scrollTo({
+                            left: carousel.track.scrollWidth - carousel.track.clientWidth,
+                            behavior: 'smooth'
                         });
                         currentDirection = 1;
                     } else {
                         carousel.track.scrollBy({ left: -slideWidth, behavior: 'smooth' });
                     }
                 }
-                
+
                 function moveCarousel() {
                     if (isPaused) return;
-                    
+
                     if (Math.random() < 0.2) {
                         currentDirection = currentDirection === 1 ? -1 : 1;
                     }
-                    
+
                     if (currentDirection === 1) {
                         moveNext();
                     } else {
                         movePrev();
                     }
                 }
-                
+
                 function startAutoplay() {
                     if (autoplayInterval) clearInterval(autoplayInterval);
                     autoplayInterval = setInterval(moveCarousel, carousel.interval);
                 }
-                
+
                 carousel.track.addEventListener('mouseenter', () => {
                     isPaused = true;
                 });
-                
+
                 carousel.track.addEventListener('mouseleave', () => {
                     setTimeout(() => {
                         isPaused = false;
                     }, 500);
                 });
-                
+
                 carousel.track.addEventListener('mousedown', () => {
                     isPaused = true;
                 });
-                
+
                 carousel.track.addEventListener('mouseup', () => {
                     setTimeout(() => {
                         isPaused = false;
                     }, 1000);
                 });
-                
+
                 carousel.track.addEventListener('scroll', () => {
                     isPaused = true;
                     clearTimeout(carousel.scrollTimeout);
@@ -3081,17 +3357,17 @@
                         isPaused = false;
                     }, 2000);
                 });
-                
+
                 carousel.track.addEventListener('touchstart', () => {
                     isPaused = true;
                 });
-                
+
                 carousel.track.addEventListener('touchend', () => {
                     setTimeout(() => {
                         isPaused = false;
                     }, 1000);
                 });
-                
+
                 startAutoplay();
             });
         }
